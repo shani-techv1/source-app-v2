@@ -223,8 +223,7 @@ export function Dropdown<T = string>({
                     className="inline-flex items-center gap-1 bg-gray-100 px-2 py-1 rounded text-sm"
                   >
                     <span className="truncate max-w-20">{selected?.label}</span>
-                    <button
-                      type="button"
+                    <div
                       onClick={(e) => {
                         e.stopPropagation();
                         removeSelection(selectedValue);
@@ -232,7 +231,7 @@ export function Dropdown<T = string>({
                       className="ml-1 hover:bg-gray-200 rounded-full p-0.5"
                     >
                       <X className="w-3 h-3" />
-                    </button>
+                    </div>
                   </span>
                 );
               })}

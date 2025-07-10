@@ -2,6 +2,9 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   /* config options here */
+  experimental: {
+    serverComponentsExternalPackages: ['@types/node'],
+  },
   images: {
     dangerouslyAllowSVG: true,
     formats: ['image/avif', 'image/webp'],

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { FormField, CreativeRole } from "./SignupFlow";
 import { cn } from "@/lib/utils";
+import { Loader2 } from "lucide-react";
 
 interface SignupStepQuestionsProps {
   currentRole: CreativeRole | null;
@@ -13,6 +14,7 @@ interface SignupStepQuestionsProps {
   handleFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleNextRole: () => void;
   formData: Record<string, string | string[] | File[] | null>;
+  isSubmitting: boolean;
 }
 
 const FormContainer = ({ children, className }: { children: React.ReactNode; className?: string }) => (
@@ -27,10 +29,11 @@ export function SignupStepQuestions({
   handleInputChange,
   handleFileChange,
   handleNextRole,
+  formData,
+  isSubmitting,
 }: SignupStepQuestionsProps) {
-  console.log("currentRole", currentRole);
-  console.log("selectedRoles", selectedRoles);
 
+  console.log("formData", formData);
 
   const [fields, setFields] = useState<FormField[]>([]);
 
@@ -81,6 +84,12 @@ export function SignupStepQuestions({
                       </p>
                       <p className="text-xs text-gray-500">{field.field_placeholder}</p>
                     </div>
+                    {formData[`form_field_${field.id}`] && Array.isArray(formData[`form_field_${field.id}`]) && (
+                      <p className="text-xs text-gray-500">{formData?.[`form_field_${field.id}`]?.length} files uploaded</p>
+                    )}
+                    {formData[`form_field_${field.id}`] && !Array.isArray(formData[`form_field_${field.id}`]) && (
+                      <p className="text-xs text-gray-500">{formData?.[`form_field_${field.id}`] as string}</p>
+                    )}
                     <input
                       id={`form_field_${field.id}`}
                       name={`form_field_${field.id}`}
@@ -131,6 +140,12 @@ export function SignupStepQuestions({
                               </p>
                               <p className="text-xs text-gray-500">{subField.field_placeholder}</p>
                             </div>
+                            {formData[`form_field_${subField.id}`] && Array.isArray(formData[`form_field_${subField.id}`]) && (
+                                <p className="text-xs text-gray-500">{formData?.[`form_field_${subField.id}`]?.length} files uploaded</p>
+                              )}
+                              {formData[`form_field_${subField.id}`] && !Array.isArray(formData[`form_field_${subField.id}`]) && (
+                                <p className="text-xs text-gray-500">{formData?.[`form_field_${field.id}`] as string}</p>
+                              )}
                             <input
                               id={`form_field_${subField.id}`}
                               name={`form_field_${subField.id}`}
@@ -198,8 +213,11 @@ export function SignupStepQuestions({
           <div className="pt-6 flex justify-end">
             <button
               type="submit"
-              className="py-3 px-8 bg-black text-white uppercase font-semibold tracking-wide rounded-lg hover:bg-gray-800 transition-colors"
+              className="flex items-center justify-between gap-2 py-3 px-8 bg-black text-white uppercase font-semibold tracking-wide rounded-lg hover:bg-gray-800 transition-colors"
             >
+              {isSubmitting && (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              )}
               {currentRole === selectedRoles[selectedRoles.length - 1] ? "Submit" : "Next"}
             </button>
           </div>
