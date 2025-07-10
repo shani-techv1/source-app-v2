@@ -23,7 +23,7 @@ interface ContentItem {
 interface ApiResponse {
   general?: ContentItem[];
 }
-
+export const dynamic = 'force-dynamic';
 // Dynamic metadata function that reads from the content API
 export async function generateMetadata(): Promise<Metadata> {
   try {
