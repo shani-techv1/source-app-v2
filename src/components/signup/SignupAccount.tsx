@@ -47,7 +47,13 @@ export default function SignupAccount({ formData, fields, handleInputChange, han
                   />
                 ) : field.type === "select" ? (
                   <Dropdown
-                    options={field.options?.map(opt => ({ label: opt, value: opt })) as DropdownOption[]}
+                    options={
+                      field.options?.map(opt => 
+                        typeof opt === 'string' 
+                          ? { label: opt, value: opt }
+                          : opt
+                      ) as DropdownOption[]
+                    }
                     value={formData[field.name] as string | string[] || null}
                     onChange={val => onDropdownChange(field.name, val)}
                     placeholder={field.placeholder}

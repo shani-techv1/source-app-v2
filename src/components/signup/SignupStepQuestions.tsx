@@ -108,9 +108,13 @@ export function SignupStepQuestions({
                   className="w-full rounded-lg border border-gray-300 px-4 py-3 focus:border-black focus:ring-1 focus:ring-black"
                 >
                   {field.options?.map(option => (
-                    <option key={option} value={option}>
-                      {option}
-                    </option>
+                    <option
+                    key={typeof option === 'string' ? option : option.value}
+                    value={typeof option === 'string' ? option : option.value}
+                    disabled={typeof option === 'object' && option.disabled}
+                  >
+                    {typeof option === 'string' ? option : option.label}
+                  </option>
                   ))}
                 </select>
               ) : field.field_type === "group" ? (
@@ -164,9 +168,13 @@ export function SignupStepQuestions({
                           className="w-full rounded-lg border border-gray-300 px-4 py-3 focus:border-black focus:ring-1 focus:ring-black"
                         >
                           {subField.options?.map(option => (
-                            <option key={option} value={option}>
-                              {option}
-                            </option>
+                             <option
+                             key={typeof option === 'string' ? option : option.value}
+                             value={typeof option === 'string' ? option : option.value}
+                             disabled={typeof option === 'object' && option.disabled}
+                           >
+                             {typeof option === 'string' ? option : option.label}
+                           </option>
                           ))}
                         </select>
                       ) : (

@@ -5,6 +5,7 @@ import { ChevronDown, X } from "lucide-react";
 export interface DropdownOption<T = string> {
   label: string;
   value: T;
+  disabled?: boolean;
 }
 
 interface DropdownProps<T = string> {
@@ -63,12 +64,24 @@ export function Dropdown<T = string>({
       return;
     }
     if (e.key === "ArrowDown") {
-      setHighlighted(h => Math.min(h + 1, options.length - 1));
+      setHighlighted(h => {
+        let next = h + 1;
+        while (next < options.length && options[next].disabled) {
+          next++;
+        }
+        return Math.min(next, options.length - 1);
+      });
       e.preventDefault();
     } else if (e.key === "ArrowUp") {
-      setHighlighted(h => Math.max(h - 1, 0));
+      setHighlighted(h => {
+        let prev = h - 1;
+        while (prev >= 0 && options[prev].disabled) {
+          prev--;
+        }
+        return Math.max(prev, 0);
+      });
       e.preventDefault();
-    } else if (e.key === "Enter" && highlighted >= 0) {
+    } else if (e.key === "Enter" && highlighted >= 0 && !options[highlighted].disabled) {
       handleOptionSelect(options[highlighted].value);
       e.preventDefault();
     } else if (e.key === "Escape") {
@@ -178,12 +191,18 @@ export function Dropdown<T = string>({
                 role="option"
                 aria-selected={isSelected(opt.value)}
                 tabIndex={-1}
-                className={`px-4 py-3 cursor-pointer select-none text-lg flex items-center justify-between hover:bg-gray-50 transition-colors ${isSelected(opt.value) ? "bg-gray-100" : ""} ${highlighted === i ? "bg-gray-200" : ""}`}
-                onMouseEnter={() => setHighlighted(i)}
+                className={`px-4 py-3 select-none text-xs flex items-center justify-between transition-colors ${
+                  opt.disabled 
+                    ? "opacity-50 cursor-not-allowed text-gray-400" 
+                    : "cursor-pointer hover:bg-gray-50"
+                } ${isSelected(opt.value) ? "bg-gray-100" : ""} ${highlighted === i && !opt.disabled ? "bg-gray-200" : ""}`}
+                onMouseEnter={() => !opt.disabled && setHighlighted(i)}
                 onMouseLeave={() => setHighlighted(-1)}
                 onMouseDown={(e) => {
                   e.preventDefault();
-                  handleOptionSelect(opt.value);
+                  if (!opt.disabled) {
+                    handleOptionSelect(opt.value);
+                  }
                 }}
               >
                 <span className="flex-1">{opt.label}</span>
@@ -206,7 +225,7 @@ export function Dropdown<T = string>({
         ref={buttonRef}
         type="button"
         disabled={disabled}
-        className={`w-full text-left border border-gray-300 rounded-lg px-4 py-3 text-base bg-white focus:outline-none focus:border-black focus:border-[1.5px] transition-all flex items-center justify-between ${disabled ? "bg-gray-100 cursor-not-allowed" : "cursor-pointer"} ${open ? "border-black border-[1.5px]" : ""}`}
+        className={`w-full  text-left border border-gray-300 rounded-lg px-4 py-3 text-base bg-white focus:outline-none focus:border-black focus:border-[1.5px] transition-all flex items-center justify-between ${disabled ? "bg-gray-100 cursor-not-allowed" : "cursor-pointer"} ${open ? "border-black border-[1.5px]" : ""}`}
         onClick={() => setOpen(o => !o)}
         onKeyDown={handleKeyDown}
         aria-haspopup="listbox"
@@ -214,7 +233,7 @@ export function Dropdown<T = string>({
       >
         <div className="flex-1 min-w-0">
           {multiselect && Array.isArray(value) && value.length > 0 ? (
-            <div className="flex flex-wrap gap-1">
+            <div className="flex overflow-auto  gap-1">
                              {value.slice(0, 2).map((selectedValue) => {
                  const selected = options.find(opt => opt.value === selectedValue);
                 return (

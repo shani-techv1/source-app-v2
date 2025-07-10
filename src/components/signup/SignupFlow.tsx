@@ -5,14 +5,14 @@
   // Export creative roles for use in the signup page
   export type CreativeRole = string;
   export const creativeRoles = [
+    "PHOTOGRAPHER",
+    "VIDEOGRAPHER",
     "MODEL",
     "INFLUENCER",
     "ACTOR",
     "STYLIST",
     "HAIR STYLIST",
     "MAKEUP ARTIST",
-    "PHOTOGRAPHER",
-    "VIDEOGRAPHER",
     "ASSISTANT",
     "LIGHTING",
     "DIRECTOR",
@@ -56,7 +56,7 @@
     type: string;
     placeholder: string;
     isOptional?: boolean;
-    options?: string[];
+    options?: string[] | { label: string; value: string; disabled?: boolean }[];
     fields?: FormField[];
     repeatable?: boolean;
     multiselect?: boolean;

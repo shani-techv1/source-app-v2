@@ -24,7 +24,11 @@ const basicDetailsFields: FormField[] = [
     label: 'SELECT ALL THAT APPLIES',
     type: 'select',
     placeholder: 'Select',
-    options: creativeRoles,
+    options: creativeRoles.map(role => ({
+      label: role,
+      value: role,
+      disabled: role !== 'PHOTOGRAPHER' && role !== 'VIDEOGRAPHER'
+    })),
     multiselect: true,
     maxSelections: 3
   },
@@ -315,7 +319,7 @@ export default function SignupModal({ isOpen, onClose }: SignupModalProps) {
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}
-            <div className="sticky top-0 bg-white px-6 py-4 rounded-t-2xl">
+            <div className="sticky top-0 bg-white px-6 py-4 rounded-t-2xl z-50  ">
               <div className="flex items-center justify-between">
               {step !== "userType" && (
                     <button 
@@ -338,7 +342,7 @@ export default function SignupModal({ isOpen, onClose }: SignupModalProps) {
                 step === "userType" && (<h1 className="text-3xl font-bold mb-6 text-center">Join As</h1>)
               }
               {
-                ["roleSelection", "questions", "success"].includes(step) && (<h1 className="text-3xl font-bold text-center">Create an account</h1>)
+                ["roleSelection", "questions", "success"].includes(step) && (<h1 className="text-3xl font-bold text-center bg-white ">Create an account</h1>)
               }
             </div>
             {/* Content */}
