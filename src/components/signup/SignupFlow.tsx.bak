@@ -1,0 +1,685 @@
+"use client";
+
+import React, { useState, useRef, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { 
+  Dialog, 
+  DialogContent,
+  DialogTrigger, 
+  DialogTitle,
+  DialogDescription,
+  DialogHeader
+} from "@/components/ui/dialog";
+import { X, HelpCircle } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { useLenis } from 'lenis/react';
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
+
+// Types for creative roles
+type CreativeRole = "Photographer" | "Videographer" | "Make-up Artist" | "Hair Stylist" | "Stylist" | "Art Director" | "Illustrator" | "Digital Artist" | "Retoucher" | "Location Scout";
+
+// Form field type
+type FormField = {
+  name: string;
+  label: string;
+  type: string;
+  placeholder?: string;
+  isOptional?: boolean;
+};
+
+// Photographer fields
+const photographerFields: FormField[] = [
+  { name: "firstName", label: "FIRST NAME", type: "text", placeholder: "Your first name" },
+  { name: "surname", label: "SURNAME", type: "text", placeholder: "Your last name" },
+  { name: "email", label: "EMAIL", type: "email", placeholder: "Your email address" },
+  { name: "confirmEmail", label: "CONFIRM EMAIL", type: "email", placeholder: "Confirm your email" },
+  { name: "phone", label: "PHONE NUMBER", type: "tel", placeholder: "Your phone number" },
+  { name: "password", label: "ACCOUNT PASSWORD", type: "password", placeholder: "Create a password" },
+  { name: "address", label: "ADDRESS", type: "text", placeholder: "Your address" },
+  { name: "zipCode", label: "ZIP / POST CODE", type: "text", placeholder: "Your zip/postal code" },
+  { name: "gender", label: "GENDER", type: "text", placeholder: "Your gender" },
+  { name: "dob", label: "DATE OF BIRTH", type: "date", placeholder: "" },
+  { name: "location", label: "MAIN LOCATION", type: "text", placeholder: "Your main work location" },
+  { name: "instagram", label: "INSTAGRAM ACCOUNT", type: "text", placeholder: "Your Instagram handle" },
+  { name: "rate", label: "AVERAGE DAY RATE – CURRENCY", type: "text", placeholder: "Your day rate" },
+  { name: "interests", label: "INTERESTS", type: "text", placeholder: "Your interests", isOptional: true },
+  { name: "bio", label: "BIO", type: "textarea", placeholder: "Tell us about yourself", isOptional: true },
+  { name: "clients", label: "CLIENTS", type: "text", placeholder: "Your previous clients", isOptional: true },
+  { name: "portfolio", label: "PORTFOLIO PHOTOS", type: "file", placeholder: "Upload at least 4 photos" },
+];
+
+// Videographer fields
+const videographerFields: FormField[] = [
+  { name: "firstName", label: "FIRST NAME", type: "text", placeholder: "Your first name" },
+  { name: "surname", label: "SURNAME", type: "text", placeholder: "Your last name" },
+  { name: "email", label: "EMAIL", type: "email", placeholder: "Your email address" },
+  { name: "confirmEmail", label: "CONFIRM EMAIL", type: "email", placeholder: "Confirm your email" },
+  { name: "phone", label: "PHONE NUMBER", type: "tel", placeholder: "Your phone number" },
+  { name: "password", label: "ACCOUNT PASSWORD", type: "password", placeholder: "Create a password" },
+  { name: "address", label: "ADDRESS", type: "text", placeholder: "Your address" },
+  { name: "zipCode", label: "ZIP / POST CODE", type: "text", placeholder: "Your zip/postal code" },
+  { name: "gender", label: "GENDER", type: "text", placeholder: "Your gender" },
+  { name: "dob", label: "DATE OF BIRTH", type: "date", placeholder: "" },
+  { name: "location", label: "MAIN LOCATION", type: "text", placeholder: "Your main work location" },
+  { name: "instagram", label: "INSTAGRAM ACCOUNT", type: "text", placeholder: "Your Instagram handle" },
+  { name: "rate", label: "AVERAGE DAY RATE – CURRENCY", type: "text", placeholder: "Your day rate" },
+  { name: "interests", label: "INTERESTS", type: "text", placeholder: "Your interests", isOptional: true },
+  { name: "bio", label: "BIO", type: "textarea", placeholder: "Tell us about yourself", isOptional: true },
+  { name: "clients", label: "CLIENTS", type: "text", placeholder: "Your previous clients", isOptional: true },
+  { name: "portfolio", label: "PORTFOLIO - VIDEO", type: "file", placeholder: "Upload at least 4 videos" },
+];
+
+// Available creative roles
+const creativeRoles: CreativeRole[] = [
+  "Photographer",
+  "Videographer",
+  "Make-up Artist",
+  "Hair Stylist",
+  "Stylist",
+  "Art Director",
+  "Illustrator",
+  "Digital Artist",
+  "Retoucher",
+  "Location Scout",
+];
+
+// Form animations
+const formVariants = {
+  hidden: { opacity: 0, x: -20 },
+  visible: { 
+    opacity: 1, 
+    x: 0,
+    transition: { duration: 0.3 }
+  },
+  exit: { 
+    opacity: 0, 
+    x: 20,
+    transition: { duration: 0.2 }
+  }
+};
+
+type SignupFlowProps = {
+  onOpenChange?: (open: boolean) => void;
+  onClose?: () => void;
+  buttonVariant?: "default" | "destructive" | "outline" | "secondary" | "ghost" | "link";
+  buttonSize?: "default" | "sm" | "lg" | "icon";
+  buttonClassName?: string;
+  buttonText?: string;
+};
+
+type FormData = Record<string, string | File[] | null>;
+
+export function SignupFlow({ onOpenChange, onClose, buttonVariant = "default", buttonSize = "default", buttonClassName, buttonText }: SignupFlowProps) {
+  const [step, setStep] = useState<"initial" | "userType" | "roleSelection" | "questions" | "roles" | "success">("initial");
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [userType, setUserType] = useState<"booker" | "creator" | null>(null);
+  const [selectedRoles, setSelectedRoles] = useState<CreativeRole[]>([]);
+  const [showCreatorTooltip, setShowCreatorTooltip] = useState(false);
+  const [formData, setFormData] = useState<FormData>({});
+  const [currentRole, setCurrentRole] = useState<CreativeRole | null>(null);
+  const [open, setOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  
+  // Ref for scrollable container
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  // Store the scroll position of the window
+  const scrollPositionRef = useRef(0);
+
+  // Get lenis instance
+  const lenis = useLenis();
+
+  // Prevent body scroll when modal is open
+  useEffect(() => {
+    // More robust scroll locking
+    if (open) {
+      // Store current scroll position
+      scrollPositionRef.current = window.scrollY;
+      
+      // Apply fixed position to body to prevent scrolling
+      document.body.style.position = 'fixed';
+      document.body.style.top = `-${scrollPositionRef.current}px`;
+      document.body.style.width = '100%';
+      document.body.style.overflow = 'hidden';
+      
+      if (lenis) lenis.stop();
+    } else {
+      // Restore scroll position
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.width = '';
+      document.body.style.overflow = '';
+      
+      // Restore scroll position
+      window.scrollTo(0, scrollPositionRef.current);
+      
+      if (lenis) lenis.start();
+    }
+    
+    // Notify parent component about modal state
+    if (onOpenChange) {
+      onOpenChange(open);
+    }
+    
+    return () => {
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.width = '';
+      document.body.style.overflow = '';
+      
+      if (lenis) lenis.start();
+    };
+  }, [open, lenis, onOpenChange]);
+
+  // Add wheel event handler to prevent scroll propagation
+  useEffect(() => {
+    const scrollContainer = scrollContainerRef.current;
+    
+    if (!scrollContainer || !open) return;
+    
+    const handleWheel = (e: WheelEvent) => {
+      if (!scrollContainer) return;
+      
+      const { scrollTop, scrollHeight, clientHeight } = scrollContainer;
+      const isScrolledToTop = scrollTop === 0;
+      const isScrolledToBottom = scrollTop + clientHeight >= scrollHeight - 1;
+      
+      // If we're at the top and trying to scroll up, or at the bottom and trying to scroll down, prevent default
+      if ((isScrolledToTop && e.deltaY < 0) || (isScrolledToBottom && e.deltaY > 0)) {
+        e.preventDefault();
+      }
+      
+      // Always stop propagation to prevent background scrolling
+      e.stopPropagation();
+    };
+    
+    // For desktop: wheel events
+    scrollContainer.addEventListener('wheel', handleWheel, { passive: false });
+    
+    // For mobile: touch events
+    const handleTouchMove = (e: TouchEvent) => {
+      const { scrollTop, scrollHeight, clientHeight } = scrollContainer;
+      const isScrolledToTop = scrollTop <= 0;
+      const isScrolledToBottom = scrollTop + clientHeight >= scrollHeight - 1;
+      
+      // Determine scroll direction from touch
+      const touch = e.touches[0];
+      const startY = touch.clientY;
+      
+      // Get stored touch start position or store the current one
+      if (!scrollContainer.dataset.touchStartY) {
+        scrollContainer.dataset.touchStartY = String(startY);
+        return;
+      }
+      
+      const touchStartY = Number(scrollContainer.dataset.touchStartY);
+      const direction = touchStartY - startY > 0 ? 'down' : 'up';
+      
+      // If we're at the top and trying to scroll up, or at the bottom and trying to scroll down, prevent default
+      if ((isScrolledToTop && direction === 'up') || (isScrolledToBottom && direction === 'down')) {
+        e.preventDefault();
+      }
+    };
+    
+    const handleTouchStart = (e: TouchEvent) => {
+      const touch = e.touches[0];
+      scrollContainer.dataset.touchStartY = String(touch.clientY);
+    };
+    
+    const handleTouchEnd = () => {
+      delete scrollContainer.dataset.touchStartY;
+    };
+    
+    // Add touch event listeners for mobile
+    scrollContainer.addEventListener('touchstart', handleTouchStart, { passive: true });
+    scrollContainer.addEventListener('touchmove', handleTouchMove, { passive: false });
+    scrollContainer.addEventListener('touchend', handleTouchEnd, { passive: true });
+    
+    // Add a global event listener to prevent scrolling outside the container
+    const preventDefaultScroll = (e: Event) => {
+      if (!scrollContainer.contains(e.target as Node) && open) {
+        e.preventDefault();
+      }
+    };
+    
+    // Apply to window to catch all scrolling events
+    window.addEventListener('wheel', preventDefaultScroll, { passive: false });
+    window.addEventListener('touchmove', preventDefaultScroll, { passive: false });
+    
+    return () => {
+      scrollContainer.removeEventListener('wheel', handleWheel);
+      scrollContainer.removeEventListener('touchstart', handleTouchStart);
+      scrollContainer.removeEventListener('touchmove', handleTouchMove);
+      scrollContainer.removeEventListener('touchend', handleTouchEnd);
+      window.removeEventListener('wheel', preventDefaultScroll);
+      window.removeEventListener('touchmove', preventDefaultScroll);
+    };
+  }, [open, step]);
+
+  const handleUserTypeSelection = (type: "booker" | "creator") => {
+    setUserType(type);
+    if (type === "creator") {
+      // Creator role not available yet
+      return;
+    }
+    setStep("roleSelection");
+  };
+
+  const handleRoleToggle = (role: CreativeRole) => {
+    if (selectedRoles.includes(role)) {
+      setSelectedRoles(selectedRoles.filter(r => r !== role));
+    } else {
+      setSelectedRoles([...selectedRoles, role]);
+    }
+  };
+
+  const handleRoleConfirm = () => {
+    if (selectedRoles.length > 0) {
+      setCurrentRole(selectedRoles[0]); // Start with the first role
+      setStep("questions");
+    }
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // Handle file uploads here
+    const files = e.target.files ? Array.from(e.target.files) : [];
+    console.log("File selected:", files);
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log("Form submitted:", formData);
+    
+    // Show success message
+    alert("Thank you for submitting. Your profile is in review. We will email you if your application is successful / once it's public.");
+    
+    // Close modal and reset form
+    setOpen(false);
+    resetForm();
+  };
+
+  const resetForm = () => {
+    setStep("initial");
+    setUserType(null);
+    setSelectedRoles([]);
+    setFormData({});
+    setCurrentRole(null);
+  };
+
+  const getFieldsForCurrentRole = () => {
+    if (currentRole === "Photographer") return photographerFields;
+    if (currentRole === "Videographer") return videographerFields;
+    return [];
+  };
+
+  // Get the next role or complete if done
+  const handleNextRole = () => {
+    const currentIndex = selectedRoles.indexOf(currentRole!);
+    if (currentIndex < selectedRoles.length - 1) {
+      setCurrentRole(selectedRoles[currentIndex + 1]);
+    } else {
+      // All roles completed
+      console.log("All roles completed");
+      // Create a synthetic FormEvent to pass to handleSubmit
+      const syntheticEvent = {
+        preventDefault: () => {},
+      } as React.FormEvent;
+      handleSubmit(syntheticEvent);
+    }
+  };
+
+  // Filter roles based on search term, now just used for filtering
+  const filteredRoles = creativeRoles.filter(role => 
+    role.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+  };
+  
+  const clearSearch = () => {
+    setSearchTerm("");
+  };
+
+  return (
+    <Dialog
+      open={open}
+      onOpenChange={(newState) => {
+        setOpen(newState);
+        if (onOpenChange) {
+          onOpenChange(newState);
+        }
+      }}
+    >
+      <DialogTrigger asChild>
+        {!open && (
+          <Button
+            variant={buttonVariant}
+            size={buttonSize}
+            className={buttonClassName}
+          >
+            {buttonText ?? "Sign Up"}
+          </Button>
+        )}
+      </DialogTrigger>
+      <DialogContent 
+        className="sm:max-w-[90vw] md:max-w-[80vw] lg:max-w-[1000px] max-h-[90vh] p-0 overflow-visible"
+        onPointerDownOutside={(e) => {
+          e.preventDefault();
+        }}
+        onInteractOutside={(e) => {
+          e.preventDefault();
+        }}
+      >
+        <div className="max-h-[85vh] overflow-y-auto custom-scrollbar">
+          <DialogHeader className="px-6 pt-6 pb-4 border-b">
+            <DialogTitle className="text-2xl font-bold">
+              {step === "roles" && "Select Your Roles"}
+              {step === "questions" && "Complete Your Profile"}
+              {step === "success" && "Registration Complete!"}
+            </DialogTitle>
+          </DialogHeader>
+          <div 
+            ref={scrollContainerRef}
+            className="max-h-[80vh] overflow-y-auto custom-scrollbar scroll-container"
+            style={{ 
+              scrollbarWidth: 'thin', 
+              scrollbarColor: 'rgba(0,0,0,0.3) transparent',
+              WebkitOverflowScrolling: 'touch',
+              overscrollBehavior: 'contain'
+            }}
+          >
+            <div className="p-6">
+              <AnimatePresence mode="wait">
+                {step === "initial" && (
+                  <motion.div
+                    key="initial"
+                    variants={formVariants}
+                    initial="hidden"
+                    animate="visible"
+                    exit="exit"
+                    className="flex flex-col items-center gap-4 mt-4"
+                  >
+                    <button 
+                      onClick={() => setStep("userType")}
+                      className="w-full py-3 px-4 bg-black text-white uppercase font-semibold tracking-wide rounded-lg hover:bg-gray-800 transition-colors"
+                    >
+                      Join Us
+                    </button>
+
+                    <div className="text-center text-gray-500 my-2">OR</div>
+
+                    <div className="flex flex-row space-x-3 w-full justify-between">
+                      <button className="rounded-lg w-full px-4 h-12 bg-black flex justify-center items-center">
+                        <span className="text-white uppercase font-bold tracking-tighter mx-2">Instagram</span>
+                      </button>
+                      <button className="rounded-lg w-full px-4 h-12 bg-black flex justify-center items-center">
+                        <span className="text-white uppercase font-bold tracking-tighter mx-2">Google</span>
+                      </button>
+                    </div>
+                  </motion.div>
+                )}
+
+                {step === "userType" && (
+                  <motion.div
+                    key="userType"
+                    variants={formVariants}
+                    initial="hidden"
+                    animate="visible"
+                    exit="exit"
+                    className="mt-4"
+                  >
+                    <div className="flex flex-col space-y-4">
+                      <button
+                        onClick={() => handleUserTypeSelection("booker")}
+                        className="w-full text-left py-3 px-4 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                      >
+                        <div className="flex items-center justify-between">
+                          <span className="text-lg font-medium">BOOKER</span>
+                          <span className="text-xl">›</span>
+                        </div>
+                      </button>
+                      
+                      <div className="relative">
+                        <button
+                          onMouseEnter={() => setShowCreatorTooltip(true)}
+                          onMouseLeave={() => setShowCreatorTooltip(false)}
+                          onClick={() => handleUserTypeSelection("creator")}
+                          className="w-full text-left py-3 px-4 border border-gray-300 rounded-lg bg-gray-100 text-gray-400 flex items-center justify-between"
+                          disabled
+                        >
+                          <span className="text-lg font-medium">CREATOR</span>
+                          <div className="flex items-center">
+                            <HelpCircle className="h-5 w-5 text-gray-400 mr-2" />
+                            <span className="text-xl">›</span>
+                          </div>
+                        </button>
+                        
+                        {showCreatorTooltip && (
+                          <div className="absolute right-0 top-full mt-2 p-3 bg-black text-white text-sm rounded-md z-10 max-w-xs">
+                            This feature is not live yet. Please check back soon!
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+
+                {step === "roleSelection" && (
+                  <motion.div
+                    key="roleSelection"
+                    variants={formVariants}
+                    initial="hidden"
+                    animate="visible"
+                    exit="exit"
+                    className="mt-4"
+                  >
+                    {/* <h3 className="text-2xl font-bold mb-4 text-center">I'M A...</h3> */}
+                    
+                    {/* Selected roles display - tag/pill style */}
+                    <div className="relative border border-gray-300 rounded-xl p-4 mb-5 min-h-[44px]">
+                      <div className="flex flex-wrap gap-2">
+                        {selectedRoles.map(role => (
+                          <div 
+                            key={role} 
+                            className="inline-flex items-center rounded-full py-1.5 px-3 bg-gray-200 gap-1"
+                          >
+                            <span className="text-sm font-medium">{role}</span>
+                            <button 
+                              onClick={() => handleRoleToggle(role)} 
+                              className="rounded-full w-5 h-5 inline-flex items-center justify-center hover:bg-gray-300"
+                              aria-label={`Remove ${role}`}
+                            >
+                              <X className="h-3 w-3" />
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                      {selectedRoles.length === 0 && (
+                        <span className="text-sm text-gray-500 absolute top-1/2 left-4 transform -translate-y-1/2">
+                          I&apos;m a...
+                        </span>
+                      )}
+                      <input
+                        type="text"
+                        value={searchTerm}
+                        onChange={handleSearchChange}
+                        className="absolute inset-0 w-full h-full opacity-0 cursor-text"
+                        placeholder="Search roles..."
+                      />
+                      {searchTerm && (
+                        <button 
+                          onClick={clearSearch}
+                          className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500"
+                          aria-label="Clear search"
+                        >
+                          <X className="h-5 w-5" />
+                        </button>
+                      )}
+                    </div>
+                    
+                    {/* Role list in style of second screenshot */}
+                    <div className="border border-gray-300 rounded-lg overflow-hidden">
+                      {filteredRoles.map((role) => (
+                        <div 
+                          key={role}
+                          className={`py-3 px-4 border-b border-gray-200 last:border-b-0 ${
+                            selectedRoles.includes(role) ? "bg-gray-200" : "bg-white"
+                          }`}
+                        >
+                          <button
+                            onClick={() => handleRoleToggle(role)}
+                            className="w-full text-left"
+                            disabled={role !== "Photographer" && role !== "Videographer"}
+                          >
+                            <span className={`text-base ${
+                              role !== "Photographer" && role !== "Videographer" ? "text-gray-400" : "text-black"
+                            }`}>
+                              {role}
+                            </span>
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                    
+                    <div className="mt-6 flex justify-end">
+                      <button
+                        onClick={handleRoleConfirm}
+                        disabled={selectedRoles.length === 0}
+                        className={cn(
+                          "py-3 px-6 bg-black text-white uppercase font-semibold tracking-wide rounded-lg",
+                          selectedRoles.length === 0 ? "opacity-50 cursor-not-allowed" : "hover:bg-gray-800 transition-colors"
+                        )}
+                      >
+                        Continue
+                      </button>
+                    </div>
+                  </motion.div>
+                )}
+
+                {step === "questions" && currentRole && (
+                  <motion.div
+                    key={`questions-${currentRole}`}
+                    variants={formVariants}
+                    initial="hidden"
+                    animate="visible"
+                    exit="exit"
+                    className="mt-4 w-full"
+                  >
+                    <h2 className="text-3xl font-bold mb-6 uppercase text-center">
+                      SELECT QUESTIONS - {currentRole}
+                    </h2>
+
+                    <div className="mb-6">
+                      <div className="flex flex-col md:flex-row">
+                        {/* Left sidebar with category selection */}
+                        <div className="w-full md:w-1/3 bg-white">
+                          {selectedRoles.map(role => (
+                            <div 
+                              key={role} 
+                              className={`py-3 px-4 font-bold cursor-pointer border border-b-0 last:border-b ${
+                                currentRole === role 
+                                  ? "bg-black text-white" 
+                                  : "text-gray-700 hover:bg-gray-100"
+                              }`}
+                              onClick={() => setCurrentRole(role)}
+                            >
+                              {role.toUpperCase()}
+                            </div>
+                          ))}
+                        </div>
+                        
+                        {/* Right side form fields */}
+                        <div className="w-full md:w-2/3 p-4 md:p-6">
+                          {getFieldsForCurrentRole().map((field) => (
+                            <div key={field.name} className="mb-6">
+                              <div className="uppercase font-bold mb-2 text-base">
+                                {field.label}
+                              </div>
+                              {field.type === "textarea" ? (
+                                <textarea
+                                  id={field.name}
+                                  name={field.name}
+                                  placeholder={field.placeholder}
+                                  onChange={handleInputChange}
+                                  className="w-full rounded-md border border-gray-300 bg-white px-4 py-3 text-base placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-black h-32"
+                                />
+                              ) : field.type === "file" ? (
+                                <div className="w-full">
+                                  <label htmlFor={field.name} className="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
+                                    <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                                      <p className="mb-2 text-sm text-gray-500">
+                                        <span className="font-semibold">Click to upload</span> or drag and drop
+                                      </p>
+                                      <p className="text-xs text-gray-500">
+                                        {field.placeholder}
+                                      </p>
+                                    </div>
+                                    <input 
+                                      id={field.name} 
+                                      name={field.name}
+                                      type="file" 
+                                      multiple
+                                      className="hidden" 
+                                      onChange={handleFileChange} 
+                                    />
+                                  </label>
+                                </div>
+                              ) : (
+                                <input
+                                  id={field.name}
+                                  name={field.name}
+                                  type={field.type}
+                                  placeholder={field.placeholder}
+                                  onChange={handleInputChange}
+                                  className="w-full rounded-md border border-gray-300 bg-white px-4 py-3 text-base placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-black"
+                                />
+                              )}
+                            </div>
+                          ))}
+
+                          <div className="mt-8 mb-4">
+                            <div className="flex items-start mb-4">
+                              <input
+                                type="checkbox"
+                                id="terms"
+                                className="mr-2 mt-1 h-4 w-4"
+                                required
+                              />
+                              <label htmlFor="terms" className="text-sm">
+                                CHECK BOX – &quot;I HAVE READ AND I ACCEPT THE {" "}
+                                <a href="#" className="underline font-bold">PRIVACY POLICY</a>,{" "}
+                                <a href="#" className="underline font-bold">LICENCING AGREEMENT</a> AND ALL{" "}
+                                <a href="#" className="underline font-bold">TERMS AND CONDITIONS&quot;</a>
+                              </label>
+                            </div>
+                          </div>
+
+                          <div className="flex justify-end">
+                            <button
+                              onClick={handleNextRole}
+                              className="py-3 px-8 bg-black text-white uppercase font-semibold tracking-wide rounded-lg hover:bg-gray-800 transition-colors"
+                            >
+                              Submit
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+} 
