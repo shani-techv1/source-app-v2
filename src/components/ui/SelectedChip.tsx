@@ -13,13 +13,13 @@ export const SelectedChip = <T = string>({
   label,
   value,
   onRemove,
-  className = "inline-flex items-center gap-1 bg-gray-100 px-2 py-0.5 rounded text-[0.75rem]"
+  className = "inline-flex items-center gap-1 bg-gray-100 px-2 py-0.5 rounded text-[0.5rem]"
 }: SelectedChipProps<T>) => {
   return (
     <Tooltip>
       <TooltipTrigger asChild>
         <span className={className}>
-          <span className="truncate max-w-16">{label}</span>
+          <span>{label}</span>
           <div
             onClick={(e) => {
               e.stopPropagation();

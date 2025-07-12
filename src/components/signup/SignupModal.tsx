@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ArrowLeft } from "lucide-react";
 import { creativeRoles, FormField, type CreativeRole } from "@/components/signup/SignupFlow";
@@ -134,20 +134,8 @@ export default function SignupModal({ isOpen, onClose }: SignupModalProps) {
   const [userType, setUserType] = useState<"agent" | "client" | "talent" | null>(null);
   const [basicDetails, setBasicDetails] = useState<FormData>({});
   const [formData, setFormData] = useState<FormData>({});
-  const [currentRole, setCurrentRole] = useState<number | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
   const { addToast } = useToast();
-
-  // Ensure scroll container is properly configured
-  useEffect(() => {
-    const scrollContainer = scrollContainerRef.current;
-    if (!scrollContainer) return;
-
-    // Ensure the container can receive scroll events
-    scrollContainer.style.overflowY = 'auto';
-    (scrollContainer.style as any).webkitOverflowScrolling = 'touch';
-  }, []);
 
 
   const handleInputChange = (setter: (value: React.SetStateAction<FormData>) => void) => (
@@ -195,10 +183,6 @@ export default function SignupModal({ isOpen, onClose }: SignupModalProps) {
       basicDetails: basicDetailsPayload,
       formData
     }
-
-    // const result = await submitForm(formPayload);
-
-    // console.log("result", result);
 
     const form = new FormData();
 
@@ -250,6 +234,7 @@ export default function SignupModal({ isOpen, onClose }: SignupModalProps) {
       setStep("success");
       setFormData({});
     } else {
+ 
       addToast({
         title: "Error",
         description: "An error occurred. Please try again later.",
@@ -258,7 +243,6 @@ export default function SignupModal({ isOpen, onClose }: SignupModalProps) {
       });
       setStep("userType");
       setFormData({});
-      setCurrentRole(null);
       onClose();
     }
     setIsSubmitting(false);
@@ -296,7 +280,6 @@ export default function SignupModal({ isOpen, onClose }: SignupModalProps) {
     // Reset form state when closing
     setStep("userType");
     setFormData({});
-    setCurrentRole(null);
     onClose();
   };
 
@@ -316,7 +299,7 @@ export default function SignupModal({ isOpen, onClose }: SignupModalProps) {
             initial="hidden"
             animate="visible"
             exit="exit"
-            className={cn("bg-white rounded-2xl shadow-2xl w-full max-w-2xl flex flex-col max-h-[90vh] overflow-hidden", step === "userType" ? "max-w-2xl" : "max-w-5xl")}
+            className={cn("bg-white rounded-2xl shadow-2xl w-full max-w-2xl flex flex-col max-h-[90vh]", step === "userType" ? "max-w-2xl" : "max-w-5xl")}
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}
@@ -347,7 +330,7 @@ export default function SignupModal({ isOpen, onClose }: SignupModalProps) {
               }
             </div>
             {/* Content */}
-            <div ref={scrollContainerRef} className="flex-1 modal-content-scroll p-6">
+            <div className="flex-1 p-6 overflow-y-auto">
               <AnimatePresence mode="wait">
                 {step === "userType" && (
                   <SignupStepUserType

@@ -149,10 +149,14 @@ export default function Home() {
   React.useEffect(() => {
     if (modalOpen && lenis) {
       document.body.classList.add('modal-open');
-      lenis.stop();
+      // Don't stop Lenis completely, just disable smooth scrolling for background
+      lenis.options.smoothWheel = false;
+      lenis.options.touchMultiplier = 0;
     } else if (lenis) {
       document.body.classList.remove('modal-open');
-      lenis.start();
+      // Restore smooth scrolling for background
+      lenis.options.smoothWheel = true;
+      lenis.options.touchMultiplier = 1;
     }
   }, [modalOpen, lenis]);
 
@@ -209,7 +213,12 @@ export default function Home() {
   };
 
   return (
-    <ReactLenis root options={{ gestureOrientation: 'vertical', smoothWheel: !modalOpen, touchMultiplier: modalOpen ? 0 : 1 }}>
+    <ReactLenis root options={{ 
+      gestureOrientation: 'vertical', 
+      smoothWheel: !modalOpen, 
+      touchMultiplier: modalOpen ? 0 : 1,
+      wheelMultiplier: modalOpen ? 0 : 1
+    }}>
       <div className={`relative min-h-screen ${modalOpen ? 'pointer-events-none' : ''}`}>
         {/* Subtle texture background */}
         <div
