@@ -8,9 +8,9 @@ interface SignupStepUserTypeProps {
 }
 
 const userTypeOptions: DropdownOption[] = [
-  { label: "Client", value: "client" },
-  { label: "Talent", value: "talent" },
-  { label: "Agency", value: "agent" },
+  { label: "Talent", value: "talent", disabled: false },
+  { label: "Agency", value: "agent", disabled: false },
+  { label: "Client", value: "client", disabled: true },
 ];
 
 export function SignupStepUserType({ userType, setUserType, onContinue }: SignupStepUserTypeProps) {

@@ -1,236 +1,320 @@
-import React, { useEffect, useState } from "react";
+'use client';
+
+import React, { useEffect, useState, Suspense, useRef } from "react";
 import { FormField, CreativeRole } from "./SignupFlow";
 import { cn } from "@/lib/utils";
-import { Loader2 } from "lucide-react";
+import { getRoleFieldsById } from "@/app/actions/submit-form";
+import { ChevronUp, ChevronDown } from "lucide-react";
 
 interface SignupStepQuestionsProps {
-  currentRole: CreativeRole | null;
   selectedRoles: CreativeRole[];
-  setCurrentRole: (role: CreativeRole) => void;
-  getFieldsForCurrentRole: () => Promise<FormField[]>;
   handleInputChange: (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => void;
   handleFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  handleNextRole: () => void;
   formData: Record<string, string | string[] | File[] | null>;
-  isSubmitting: boolean;
 }
 
 const FormContainer = ({ children, className }: { children: React.ReactNode; className?: string }) => (
   <div className={cn("flex flex-col space-y-4 w-full", className)}>{children}</div>
 );
 
+// Loading component for individual role sections
+const RoleSectionSkeleton = () => (
+  <div className="pb-8 animate-pulse">
+    <div className="mb-6">
+      <div className="h-3 bg-gray-200 rounded w-1/4 mb-2"></div>
+    </div>
+    <div className="space-y-6">
+      {[1, 2, 3].map((i) => (
+        <div key={i} className="space-y-2">
+          <div className="h-3 bg-gray-200 rounded w-1/3"></div>
+          <div className="h-12 bg-gray-200 rounded-lg border border-gray-200"></div>
+        </div>
+      ))}
+    </div>
+  </div>
+);
+
+// Individual role field component for better streaming
+const RoleFieldComponent = React.lazy(() => 
+  Promise.resolve({
+    default: ({ 
+      fields, 
+      handleInputChange, 
+      handleFileChange, 
+      formData 
+    }: {
+      fields: FormField[];
+      handleInputChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
+      handleFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+      formData: Record<string, string | string[] | File[] | null>;
+    }) => (
+      <div className="space-y-6">
+        {fields.map((field, fieldIndex) => (
+          <FormContainer key={field.name + "-" + fieldIndex}>
+            <label
+              htmlFor={field.name}
+              className="block text-sm font-medium text-gray-700 uppercase tracking-wide"
+            >
+              {field.field_label} {field.isOptional && <span className="text-gray-400">(Optional)</span>}
+            </label>
+            {field.field_type === "textarea" ? (
+              <textarea
+                id={`form_field_${field.id}`}
+                name={`form_field_${field.id}`}
+                placeholder={field.field_placeholder}
+                onChange={handleInputChange}
+                className="w-full rounded-lg border border-gray-300 px-4 py-3 focus:border-black focus:ring-1 focus:ring-black"
+              />
+            ) : field.field_type === "file" ? (
+              <div className="mt-1">
+                <label htmlFor={`form_field_${field.id}`} className="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
+                  <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                    <p className="mb-2 text-sm text-gray-500">
+                      <span className="font-semibold">Click to upload</span> or drag and drop
+                    </p>
+                    <p className="text-xs text-gray-500">{field.field_placeholder}</p>
+                  </div>
+                  {formData[`form_field_${field.id}`] && Array.isArray(formData[`form_field_${field.id}`]) && (
+                    <p className="text-xs text-gray-500">{formData?.[`form_field_${field.id}`]?.length} files uploaded</p>
+                  )}
+                  {formData[`form_field_${field.id}`] && !Array.isArray(formData[`form_field_${field.id}`]) && (
+                    <p className="text-xs text-gray-500">{formData?.[`form_field_${field.id}`] as string}</p>
+                  )}
+                  <input
+                    id={`form_field_${field.id}`}
+                    name={`form_field_${field.id}`}
+                    type="file"
+                    multiple
+                    className="hidden"
+                    onChange={handleFileChange}
+                  />
+                </label>
+              </div>
+            ) : field.field_type === "select" ? (
+              <select
+                id={`form_field_${field.id}`}
+                name={`form_field_${field.id}`}
+                onChange={handleInputChange}
+                className="w-full rounded-lg border border-gray-300 px-4 py-3 focus:border-black focus:ring-1 focus:ring-black"
+              >
+                {field.options?.map(option => (
+                  <option
+                  key={typeof option === 'string' ? option : option.value}
+                  value={typeof option === 'string' ? option : option.value}
+                  disabled={typeof option === 'object' && option.disabled}
+                >
+                  {typeof option === 'string' ? option : option.label}
+                </option>
+                ))}
+              </select>
+            ) : field.field_type === "group" ? (
+              <>
+                {field?.fields?.map(subField => (
+                  <div key={`form_field_${subField.id}`} className="flex flex-col space-y-2">
+                    <label
+                      htmlFor={`form_field_${subField.id}`}
+                      className="block text-sm font-medium text-gray-700 uppercase tracking-wide"
+                    >
+                      {subField.field_label} {subField.isOptional && <span className="text-gray-400">(Optional)</span>}
+                    </label>
+                    {subField.field_type === "textarea" ? (
+                      <textarea
+                        id={`form_field_${subField.id}`}
+                        name={`form_field_${subField.id}`}
+                        placeholder={subField.field_placeholder}
+                        onChange={handleInputChange}
+                        className="w-full rounded-lg border border-gray-300 px-4 py-3 focus:border-black focus:ring-1 focus:ring-black"
+                      />
+                    ) : subField.field_type === "file" ? (
+                      <div className="mt-1">
+                        <label htmlFor={`form_field_${subField.id}`} className="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
+                          <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                            <p className="mb-2 text-sm text-gray-500">
+                              <span className="font-semibold">Click to upload</span> or drag and drop
+                            </p>
+                            <p className="text-xs text-gray-500">{subField.field_placeholder}</p>
+                          </div>
+                          {formData[`form_field_${subField.id}`] && Array.isArray(formData[`form_field_${subField.id}`]) && (
+                              <p className="text-xs text-gray-500">{formData?.[`form_field_${subField.id}`]?.length} files uploaded</p>
+                            )}
+                            {formData[`form_field_${subField.id}`] && !Array.isArray(formData[`form_field_${subField.id}`]) && (
+                              <p className="text-xs text-gray-500">{formData?.[`form_field_${field.id}`] as string}</p>
+                            )}
+                          <input
+                            id={`form_field_${subField.id}`}
+                            name={`form_field_${subField.id}`}
+                            type="file"
+                            multiple
+                            className="hidden"
+                            onChange={handleFileChange}
+                          />
+                        </label>
+                      </div>
+                    ) : subField.field_type === "select" ? (
+                      <select
+                        id={`form_field_${subField.id}`}
+                        name={`form_field_${subField.id}`}
+                        onChange={handleInputChange}
+                        className="w-full rounded-lg border border-gray-300 px-4 py-3 focus:border-black focus:ring-1 focus:ring-black"
+                      >
+                        {subField.options?.map(option => (
+                           <option
+                           key={typeof option === 'string' ? option : option.value}
+                           value={typeof option === 'string' ? option : option.value}
+                           disabled={typeof option === 'object' && option.disabled}
+                         >
+                           {typeof option === 'string' ? option : option.label}
+                         </option>
+                        ))}
+                      </select>
+                    ) : (
+                      <input
+                        id={`form_field_${subField.id}`}
+                        name={`form_field_${subField.id}`}
+                        type={subField.field_type}
+                        placeholder={subField.field_placeholder}
+                        onChange={handleInputChange}
+                        className="w-full rounded-lg border border-gray-300 px-4 py-3 focus:border-black focus:ring-1 focus:ring-black"
+                      />
+                    )}
+                  </div>
+                ))}
+              </>
+            ) : (
+              <input
+                id={`form_field_${field.id}`}
+                name={`form_field_${field.id}`}
+                type={field.field_type}
+                placeholder={field.field_placeholder}
+                onChange={handleInputChange}
+                className="w-full rounded-lg border border-gray-300 px-4 py-3 focus:border-black focus:ring-1 focus:ring-black"
+              />
+            )}
+          </FormContainer>
+        ))}
+      </div>
+    )
+  })
+);
+
 export function SignupStepQuestions({
-  currentRole,
   selectedRoles,
-  setCurrentRole,
-  getFieldsForCurrentRole,
   handleInputChange,
   handleFileChange,
-  handleNextRole,
   formData,
-  isSubmitting,
 }: SignupStepQuestionsProps) {
 
   console.log("formData", formData);
 
-  const [fields, setFields] = useState<FormField[]>([]);
+  const [allFieldsByRole, setAllFieldsByRole] = useState<Record<string, FormField[]>>({});
+  const [loadedRoles, setLoadedRoles] = useState<Set<string>>(new Set());
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
+  // Get role ID mapping
+  const getRoleId = (role: CreativeRole) => {
+    const rolesMap = {
+      "PHOTOGRAPHER": 1,
+      "VIDEOGRAPHER": 2,
+      "VEHICLE OWNER": 3
+    } as const;
+    return rolesMap[role as keyof typeof rolesMap] || 0;
+  };
+
+  // Stream fields for each role as they load
+  const loadRoleFields = async (role: string) => {
+    const roleId = getRoleId(role);
+    if (roleId > 0 && !loadedRoles.has(role)) {
+      try {
+        const fields = await getRoleFieldsById(roleId);
+        setAllFieldsByRole(prev => ({
+          ...prev,
+          [role]: fields
+        }));
+        setLoadedRoles(prev => new Set([...prev, role]));
+      } catch (error) {
+        console.error(`Error fetching fields for ${role}:`, error);
+        setAllFieldsByRole(prev => ({
+          ...prev,
+          [role]: []
+        }));
+        setLoadedRoles(prev => new Set([...prev, role]));
+      }
+    }
+  };
+
+  // Start loading all roles immediately
   useEffect(() => {
-    getFieldsForCurrentRole().then(setFields);
-  }, [getFieldsForCurrentRole]);
+    if (selectedRoles.length > 0) {
+      // Load all roles in parallel
+      selectedRoles.forEach(role => loadRoleFields(role));
+    }
+  }, [selectedRoles]);
 
-  if (!currentRole && !fields.length) return null;
+  // Scroll to specific role section
+  const scrollToRole = (roleIndex: number) => {
+    const roleElements = scrollContainerRef.current?.querySelectorAll('[data-role-section]');
+    if (roleElements && roleElements[roleIndex]) {
+      roleElements[roleIndex].scrollIntoView({ 
+        behavior: 'smooth', 
+        block: 'start' 
+      });
+    }
+  };
+
+  if (!selectedRoles.length) return null;
+
   return (
-    <div className="max-w-2xl mx-auto">
-      <div className="flex mb-6 border-b border-gray-200 overflow-x-auto">
-        {selectedRoles.map(role => (
-          <button
-            key={role}
-            className={`py-3 px-5 font-medium whitespace-nowrap ${
-              currentRole === role ? "border-b-2 border-black text-black" : "text-gray-500 hover:text-gray-800"
-            }`}
-            onClick={() => setCurrentRole(role)}
+    <>
+
+      {/* Content */}
+      <div 
+        ref={scrollContainerRef}
+        className="space-y-6"
+      >
+        {selectedRoles.map((role, roleIndex) => (
+          <div 
+            key={role + "" + roleIndex} 
+            className="pb-8"
+            data-role-section
           >
-            {role}
-          </button>
-        ))}
-      </div>
-      <form onSubmit={e => { e.preventDefault(); handleNextRole(); }}>
-        <div className="space-y-6">
-          {fields.map(field => (
-            <FormContainer key={field.name}>
-              <label
-                htmlFor={field.name}
-                className="block text-sm font-medium text-gray-700 uppercase tracking-wide"
-              >
-                {field.field_label} {field.isOptional && <span className="text-gray-400">(Optional)</span>}
-              </label>
-              {field.field_type === "textarea" ? (
-                <textarea
-                  id={`form_field_${field.id}`}
-                  name={`form_field_${field.id}`}
-                  placeholder={field.field_placeholder}
-                  onChange={handleInputChange}
-                  className="w-full rounded-lg border border-gray-300 px-4 py-3 focus:border-black focus:ring-1 focus:ring-black"
-                />
-              ) : field.field_type === "file" ? (
-                <div className="mt-1">
-                  <label htmlFor={`form_field_${field.id}`} className="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
-                    <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                      <p className="mb-2 text-sm text-gray-500">
-                        <span className="font-semibold">Click to upload</span> or drag and drop
-                      </p>
-                      <p className="text-xs text-gray-500">{field.field_placeholder}</p>
-                    </div>
-                    {formData[`form_field_${field.id}`] && Array.isArray(formData[`form_field_${field.id}`]) && (
-                      <p className="text-xs text-gray-500">{formData?.[`form_field_${field.id}`]?.length} files uploaded</p>
-                    )}
-                    {formData[`form_field_${field.id}`] && !Array.isArray(formData[`form_field_${field.id}`]) && (
-                      <p className="text-xs text-gray-500">{formData?.[`form_field_${field.id}`] as string}</p>
-                    )}
-                    <input
-                      id={`form_field_${field.id}`}
-                      name={`form_field_${field.id}`}
-                      type="file"
-                      multiple
-                      className="hidden"
-                      onChange={handleFileChange}
-                    />
-                  </label>
-                </div>
-              ) : field.field_type === "select" ? (
-                <select
-                  id={`form_field_${field.id}`}
-                  name={`form_field_${field.id}`}
-                  onChange={handleInputChange}
-                  className="w-full rounded-lg border border-gray-300 px-4 py-3 focus:border-black focus:ring-1 focus:ring-black"
-                >
-                  {field.options?.map(option => (
-                    <option
-                    key={typeof option === 'string' ? option : option.value}
-                    value={typeof option === 'string' ? option : option.value}
-                    disabled={typeof option === 'object' && option.disabled}
-                  >
-                    {typeof option === 'string' ? option : option.label}
-                  </option>
-                  ))}
-                </select>
-              ) : field.field_type === "group" ? (
-                <>
-                  {field?.fields?.map(subField => (
-                    <div key={`form_field_${subField.id}`} className="flex flex-col space-y-2">
-                      <label
-                        htmlFor={`form_field_${subField.id}`}
-                        className="block text-sm font-medium text-gray-700 uppercase tracking-wide"
-                      >
-                        {subField.field_label} {subField.isOptional && <span className="text-gray-400">(Optional)</span>}
-                      </label>
-                      {subField.field_type === "textarea" ? (
-                        <textarea
-                          id={`form_field_${subField.id}`}
-                          name={`form_field_${subField.id}`}
-                          placeholder={subField.field_placeholder}
-                          onChange={handleInputChange}
-                          className="w-full rounded-lg border border-gray-300 px-4 py-3 focus:border-black focus:ring-1 focus:ring-black"
-                        />
-                      ) : subField.field_type === "file" ? (
-                        <div className="mt-1">
-                          <label htmlFor={`form_field_${subField.id}`} className="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
-                            <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                              <p className="mb-2 text-sm text-gray-500">
-                                <span className="font-semibold">Click to upload</span> or drag and drop
-                              </p>
-                              <p className="text-xs text-gray-500">{subField.field_placeholder}</p>
-                            </div>
-                            {formData[`form_field_${subField.id}`] && Array.isArray(formData[`form_field_${subField.id}`]) && (
-                                <p className="text-xs text-gray-500">{formData?.[`form_field_${subField.id}`]?.length} files uploaded</p>
-                              )}
-                              {formData[`form_field_${subField.id}`] && !Array.isArray(formData[`form_field_${subField.id}`]) && (
-                                <p className="text-xs text-gray-500">{formData?.[`form_field_${field.id}`] as string}</p>
-                              )}
-                            <input
-                              id={`form_field_${subField.id}`}
-                              name={`form_field_${subField.id}`}
-                              type="file"
-                              multiple
-                              className="hidden"
-                              onChange={handleFileChange}
-                            />
-                          </label>
-                        </div>
-                      ) : subField.field_type === "select" ? (
-                        <select
-                          id={`form_field_${subField.id}`}
-                          name={`form_field_${subField.id}`}
-                          onChange={handleInputChange}
-                          className="w-full rounded-lg border border-gray-300 px-4 py-3 focus:border-black focus:ring-1 focus:ring-black"
-                        >
-                          {subField.options?.map(option => (
-                             <option
-                             key={typeof option === 'string' ? option : option.value}
-                             value={typeof option === 'string' ? option : option.value}
-                             disabled={typeof option === 'object' && option.disabled}
-                           >
-                             {typeof option === 'string' ? option : option.label}
-                           </option>
-                          ))}
-                        </select>
-                      ) : (
-                        <input
-                          id={`form_field_${subField.id}`}
-                          name={`form_field_${subField.id}`}
-                          type={subField.field_type}
-                          placeholder={subField.field_placeholder}
-                          onChange={handleInputChange}
-                          className="w-full rounded-lg border border-gray-300 px-4 py-3 focus:border-black focus:ring-1 focus:ring-black"
-                        />
-                      )}
-                    </div>
-                  ))}
-                </>
-              ) : (
-                <input
-                  id={`form_field_${field.id}`}
-                  name={`form_field_${field.id}`}
-                  type={field.field_type}
-                  placeholder={field.field_placeholder}
-                  onChange={handleInputChange}
-                  className="w-full rounded-lg border border-gray-300 px-4 py-3 focus:border-black focus:ring-1 focus:ring-black"
-                />
-              )}
-            </FormContainer>
-          ))}
-          <div className="pt-4">
-            <div className="flex items-start">
-              <input
-                type="checkbox"
-                id="terms"
-                className="mt-1 h-4 w-4 rounded border-gray-300 text-black focus:ring-black"
-                required
-              />
-              <label htmlFor="terms" className="ml-3 text-sm text-gray-600">
-                I have read and accept the{" "}
-                <a href="#" className="underline font-semibold text-black">Privacy Policy</a>,{" "}
-                <a href="#" className="underline font-semibold text-black">Licensing Agreement</a> and all{" "}
-                <a href="#" className="underline font-semibold text-black">Terms and Conditions</a>
-              </label>
+            <div className="mb-6">
+              <h3 className="text-xs font-semibold mb-2 uppercase tracking-wide text-gray-700">{role}</h3>
             </div>
-          </div>
-          <div className="pt-6 flex justify-end">
-            <button
-              type="submit"
-              className="flex items-center justify-between gap-2 py-3 px-8 bg-black text-white uppercase font-semibold tracking-wide rounded-lg hover:bg-gray-800 transition-colors"
-            >
-              {isSubmitting && (
-                <Loader2 className="w-4 h-4 animate-spin" />
+            
+            <Suspense fallback={<RoleSectionSkeleton />}>
+              {loadedRoles.has(role) && allFieldsByRole[role] ? (
+                <RoleFieldComponent
+                  fields={allFieldsByRole[role]}
+                  handleInputChange={handleInputChange}
+                  handleFileChange={handleFileChange}
+                  formData={formData}
+                />
+              ) : (
+                <RoleSectionSkeleton />
               )}
-              {currentRole === selectedRoles[selectedRoles.length - 1] ? "Submit" : "Next"}
-            </button>
+            </Suspense>
+          </div>
+        ))}
+        
+        <div className="pt-3">
+          <div className="flex items-center">
+            <input
+              type="checkbox"
+              id="terms"
+              className="h-4 w-4 rounded border-gray-300 text-black focus:ring-black"
+              required
+            />
+            <label htmlFor="terms" className="ml-3 text-sm text-gray-600">
+              I have read and accept the{" "}
+              <a href="#" className="underline font-semibold text-black">Privacy Policy</a>,{" "}
+              <a href="#" className="underline font-semibold text-black">Licensing Agreement</a> and all{" "}
+              <a href="#" className="underline font-semibold text-black">Terms and Conditions</a>
+            </label>
           </div>
         </div>
-      </form>
-    </div>
+      </div>
+    </>
   );
 } 

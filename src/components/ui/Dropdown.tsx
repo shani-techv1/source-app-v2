@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { ChevronDown, X } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "./tooltip";
 
 export interface DropdownOption<T = string> {
   label: string;
@@ -193,7 +194,7 @@ export function Dropdown<T = string>({
                 tabIndex={-1}
                 className={`px-4 py-3 select-none text-xs flex items-center justify-between transition-colors ${
                   opt.disabled 
-                    ? "opacity-50 cursor-not-allowed text-gray-400" 
+                    ? "opacity-60 cursor-not-allowed text-gray-600" 
                     : "cursor-pointer hover:bg-gray-50"
                 } ${isSelected(opt.value) ? "bg-gray-100" : ""} ${highlighted === i && !opt.disabled ? "bg-gray-200" : ""}`}
                 onMouseEnter={() => !opt.disabled && setHighlighted(i)}
@@ -206,6 +207,11 @@ export function Dropdown<T = string>({
                 }}
               >
                 <span className="flex-1">{opt.label}</span>
+                {opt.disabled && (
+                  <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-200 text-gray-700 border border-gray-300">
+                    Coming soon
+                  </span>
+                )}
                 {multiselect && isSelected(opt.value) && (
                   <div className="w-4 h-4 bg-black rounded-full flex items-center justify-center ml-2 flex-shrink-0">
                     <div className="w-2 h-2 bg-white rounded-full"></div>
@@ -220,53 +226,61 @@ export function Dropdown<T = string>({
     : null;
 
   return (
-    <div ref={ref} className={`relative w-full ${className}`} tabIndex={-1}>
-      <button
-        ref={buttonRef}
-        type="button"
-        disabled={disabled}
-        className={`w-full  text-left border border-gray-300 rounded-lg px-4 py-3 text-base bg-white focus:outline-none focus:border-black focus:border-[1.5px] transition-all flex items-center justify-between ${disabled ? "bg-gray-100 cursor-not-allowed" : "cursor-pointer"} ${open ? "border-black border-[1.5px]" : ""}`}
-        onClick={() => setOpen(o => !o)}
-        onKeyDown={handleKeyDown}
-        aria-haspopup="listbox"
-        aria-expanded={open}
-      >
-        <div className="flex-1 min-w-0">
-          {multiselect && Array.isArray(value) && value.length > 0 ? (
-            <div className="flex overflow-auto  gap-1">
-                             {value.slice(0, 2).map((selectedValue) => {
-                 const selected = options.find(opt => opt.value === selectedValue);
-                return (
-                  <span
-                    key={String(selectedValue)}
-                    className="inline-flex items-center gap-1 bg-gray-100 px-2 py-1 rounded text-sm"
-                  >
-                    <span className="truncate max-w-20">{selected?.label}</span>
-                    <div
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        removeSelection(selectedValue);
-                      }}
-                      className="ml-1 hover:bg-gray-200 rounded-full p-0.5"
-                    >
-                      <X className="w-3 h-3" />
-                    </div>
-                  </span>
-                );
-              })}
-              {value.length > 2 && (
-                <span className="text-gray-500 text-sm">+{value.length - 2} more</span>
-              )}
-            </div>
-          ) : (
-            <span className={getDisplayText() !== placeholder ? "text-black" : "text-gray-400"}>
-              {getDisplayText()}
-            </span>
-          )}
-        </div>
-        <ChevronDown className={`ml-2 h-5 w-5 text-gray-500 transition-transform flex-shrink-0 ${open ? "rotate-180" : ""}`} />
-      </button>
-      {menu}
-    </div>
+    <TooltipProvider>
+      <div ref={ref} className={`relative w-full ${className}`} tabIndex={-1}>
+        <button
+          ref={buttonRef}
+          type="button"
+          disabled={disabled}
+          className={`w-full  text-left border border-gray-300 rounded-lg px-4 py-3 text-base bg-white focus:outline-none focus:border-black focus:border-[1.5px] transition-all flex items-center justify-between ${disabled ? "bg-gray-100 cursor-not-allowed" : "cursor-pointer"} ${open ? "border-black border-[1.5px]" : ""}`}
+          onClick={() => setOpen(o => !o)}
+          onKeyDown={handleKeyDown}
+          aria-haspopup="listbox"
+          aria-expanded={open}
+        >
+          <div className="flex-1 min-w-0">
+            {multiselect && Array.isArray(value) && value.length > 0 ? (
+              <div className="flex overflow-auto gap-1">
+                               {value.slice(0, 2).map((selectedValue) => {
+                   const selected = options.find(opt => opt.value === selectedValue);
+                  return (
+                    <Tooltip key={String(selectedValue)}>
+                      <TooltipTrigger asChild>
+                        <span
+                          className="inline-flex items-center gap-1 bg-gray-100 px-2 py-0.5 rounded text-[0.75rem]"
+                        >
+                          <span className="truncate max-w-16">{selected?.label}</span>
+                          <div
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              removeSelection(selectedValue);
+                            }}
+                            className="ml-1 hover:bg-gray-200 rounded-full p-0.5"
+                          >
+                            <X className="w-3 h-3" />
+                          </div>
+                        </span>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>{selected?.label}</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  );
+                })}
+                {value.length > 2 && (
+                  <span className="text-gray-500 text-xs">+{value.length - 2} more</span>
+                )}
+              </div>
+            ) : (
+              <span className={getDisplayText() !== placeholder ? "text-black" : "text-gray-400"}>
+                {getDisplayText()}
+              </span>
+            )}
+          </div>
+          <ChevronDown className={`ml-2 h-5 w-5 text-gray-500 transition-transform flex-shrink-0 ${open ? "rotate-180" : ""}`} />
+        </button>
+        {menu}
+      </div>
+    </TooltipProvider>
   );
 }

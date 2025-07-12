@@ -1,15 +1,14 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { creativeRoles, FormField, type CreativeRole } from "@/components/signup/SignupFlow";
 import { cn } from "@/lib/utils";
 import { SignupStepUserType } from "./SignupStepUserType";
-import { SignupStepQuestions } from "./SignupStepQuestions";
 import SignupAccount from "./SignupAccount";
-import { getRoleFieldsById } from "@/app/actions/submit-form";
+
 
 type FormData = Record<string, string | string[] | File[] | null>;
 
@@ -136,6 +135,17 @@ export default function SignupModal({ isOpen, onClose }: SignupModalProps) {
   const [formData, setFormData] = useState<FormData>({});
   const [currentRole, setCurrentRole] = useState<number | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+  // Ensure scroll container is properly configured
+  useEffect(() => {
+    const scrollContainer = scrollContainerRef.current;
+    if (!scrollContainer) return;
+
+    // Ensure the container can receive scroll events
+    scrollContainer.style.overflowY = 'auto';
+    (scrollContainer.style as any).webkitOverflowScrolling = 'touch';
+  }, []);
 
 
   const handleInputChange = (setter: (value: React.SetStateAction<FormData>) => void) => (
@@ -159,7 +169,6 @@ export default function SignupModal({ isOpen, onClose }: SignupModalProps) {
   };
 
   const handleSubmit = async () => {
-    setIsSubmitting(true);
     const basicDetailsPayload = {
       firstName: basicDetails.firstName,
       lastName: basicDetails.lastName,
@@ -243,7 +252,6 @@ export default function SignupModal({ isOpen, onClose }: SignupModalProps) {
       setCurrentRole(null);
       onClose();
     }
-    setIsSubmitting(false);
   };
 
   
@@ -266,22 +274,9 @@ export default function SignupModal({ isOpen, onClose }: SignupModalProps) {
     return rolesMap[roleId as keyof typeof rolesMap] || "";
   }
 
-  const getFieldsForCurrentRole = async () => {
 
-    if (!currentRole) return [];
 
-    const roleFields = await getRoleFieldsById(currentRole);
-    return roleFields;
-  };
 
-  const handleNextRole = () => {
-    const currentIndex = (basicDetails.selectRoles as CreativeRole[])?.indexOf(getRoleName(currentRole!));
-    if (currentIndex < (basicDetails.selectRoles as CreativeRole[]).length - 1) {
-      setCurrentRole(getRoleId((basicDetails.selectRoles as CreativeRole[])[currentIndex + 1]));
-    } else {
-      handleSubmit();
-    }
-  };
 
   const goBack = () => {
     if (step === "roleSelection") {
@@ -315,11 +310,11 @@ export default function SignupModal({ isOpen, onClose }: SignupModalProps) {
             initial="hidden"
             animate="visible"
             exit="exit"
-            className={cn("bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto", step === "userType" ? "max-w-2xl" : "max-w-5xl")}
+            className={cn("bg-white rounded-2xl shadow-2xl w-full max-w-2xl flex flex-col max-h-[90vh] overflow-hidden", step === "userType" ? "max-w-2xl" : "max-w-5xl")}
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}
-            <div className="sticky top-0 bg-white px-6 py-4 rounded-t-2xl z-50  ">
+            <div className="flex-shrink-0 bg-white px-6 py-4 rounded-t-2xl z-50">
               <div className="flex items-center justify-between">
               {step !== "userType" && (
                     <button 
@@ -346,7 +341,7 @@ export default function SignupModal({ isOpen, onClose }: SignupModalProps) {
               }
             </div>
             {/* Content */}
-            <div className="p-6">
+            <div ref={scrollContainerRef} className="flex-1 modal-content-scroll p-6">
               <AnimatePresence mode="wait">
                 {step === "userType" && (
                   <SignupStepUserType
@@ -360,28 +355,19 @@ export default function SignupModal({ isOpen, onClose }: SignupModalProps) {
                 )}
                 {step === "roleSelection" && (
                   <SignupAccount
-                    formData={basicDetails}
-                    handleInputChange={handleInputChange(setBasicDetails)}
-                    handleDropdownChange={handleDropdownChange(setBasicDetails)}
+                    basicDetails={basicDetails}
+                    formData={formData}
+                    handleBasicDetailsInputChange={handleInputChange(setBasicDetails)}
+                    handleBasicDetailsDropdownChange={handleDropdownChange(setBasicDetails)}
+                    handleFormDataInputChange={handleInputChange(setFormData)}
+                    handleFormDataFileChange={handleFileChange(setFormData)}
                     fields={basicDetailsFields}
+                    isSubmitting={isSubmitting}
                     onContinue={() => {
                       const roleId = getRoleId(basicDetails.selectRoles?.[0] as CreativeRole);
                       setCurrentRole(roleId);
-                      setStep("questions")
+                      // setStep("questions")
                     }}
-                  />
-                )}
-                {step === "questions" && (
-                  <SignupStepQuestions
-                    currentRole={getRoleName(currentRole!)}
-                    selectedRoles={basicDetails.selectRoles as CreativeRole[]}
-                    setCurrentRole={(role: CreativeRole) => setCurrentRole(getRoleId(role))}
-                    getFieldsForCurrentRole={getFieldsForCurrentRole}
-                    handleInputChange={handleInputChange(setFormData)}
-                    handleFileChange={handleFileChange(setFormData)}
-                    handleNextRole={handleNextRole}
-                    formData={formData}
-                    isSubmitting={isSubmitting}
                   />
                 )}
                 {step === "success" && (
