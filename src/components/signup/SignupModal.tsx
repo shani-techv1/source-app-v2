@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 import { SignupStepUserType } from "./SignupStepUserType";
 import SignupAccount from "./SignupAccount";
 import { SignupSuccessStep } from "./SignupSuccessStep";
+import { useToast } from "@/components/ui/toast";
 
 
 type FormData = Record<string, string | string[] | File[] | null>;
@@ -136,6 +137,7 @@ export default function SignupModal({ isOpen, onClose }: SignupModalProps) {
   const [currentRole, setCurrentRole] = useState<number | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const { addToast } = useToast();
 
   // Ensure scroll container is properly configured
   useEffect(() => {
@@ -248,7 +250,12 @@ export default function SignupModal({ isOpen, onClose }: SignupModalProps) {
       setStep("success");
       setFormData({});
     } else {
-      alert("An error occurred. Please try again later.");
+      addToast({
+        title: "Error",
+        description: "An error occurred. Please try again later.",
+        variant: "destructive",
+        duration: 5000
+      });
       setStep("userType");
       setFormData({});
       setCurrentRole(null);

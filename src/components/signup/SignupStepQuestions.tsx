@@ -4,7 +4,6 @@ import React, { useEffect, useState, Suspense, useRef } from "react";
 import { FormField, CreativeRole } from "./SignupFlow";
 import { cn } from "@/lib/utils";
 import { getRoleFieldsById } from "@/app/actions/submit-form";
-import { ChevronUp, ChevronDown } from "lucide-react";
 
 interface SignupStepQuestionsProps {
   selectedRoles: CreativeRole[];
@@ -251,17 +250,6 @@ export function SignupStepQuestions({
       selectedRoles.forEach(role => loadRoleFields(role));
     }
   }, [selectedRoles]);
-
-  // Scroll to specific role section
-  const scrollToRole = (roleIndex: number) => {
-    const roleElements = scrollContainerRef.current?.querySelectorAll('[data-role-section]');
-    if (roleElements && roleElements[roleIndex]) {
-      roleElements[roleIndex].scrollIntoView({ 
-        behavior: 'smooth', 
-        block: 'start' 
-      });
-    }
-  };
 
   if (!selectedRoles.length) return null;
 
