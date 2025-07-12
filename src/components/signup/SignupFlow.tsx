@@ -7,6 +7,7 @@
   export const creativeRoles = [
     "PHOTOGRAPHER",
     "VIDEOGRAPHER",
+    "VEHICLE OWNER",
     "MODEL",
     "INFLUENCER",
     "ACTOR",
@@ -25,7 +26,6 @@
     "TALENT AGENT",
     "SET DESIGNER",
     "GRAPHIC DESIGNER",
-    "VEHICLE OWNER",
     "EQUIPTMENT",
     "PROPS",
     "LOCATION (STUDIOS, HOUSES & OTHER)",
