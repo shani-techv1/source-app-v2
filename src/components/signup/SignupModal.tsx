@@ -6,6 +6,7 @@ import { X, ArrowLeft } from "lucide-react";
 import { creativeRoles, FormField, type CreativeRole } from "@/components/signup/SignupFlow";
 import { cn } from "@/lib/utils";
 import { SignupStepUserType } from "./SignupStepUserType";
+import { SignupStepBasicDetails } from "./SignupStepBasicDetails";
 import SignupAccount from "./SignupAccount";
 import { SignupSuccessStep } from "./SignupSuccessStep";
 import { useToast } from "@/components/ui/toast";
@@ -18,20 +19,7 @@ interface SignupModalProps {
   onClose: () => void;
 }
 
-const basicDetailsFields: FormField[] = [
-  {
-    name: 'selectRoles',
-    label: 'SELECT ALL THAT APPLIES',
-    type: 'select',
-    placeholder: 'Select',
-    options: creativeRoles.map(role => ({
-      label: role,
-      value: role,
-      disabled: role !== 'PHOTOGRAPHER' && role !== 'VIDEOGRAPHER'
-    })),
-    multiselect: true,
-    maxSelections: 3
-  },
+const basicDetailsFirstFields: FormField[] = [
   {
     name: "firstName",
     label: "First Name",
@@ -55,6 +43,22 @@ const basicDetailsFields: FormField[] = [
     label: "Confirm Email",
     type: "email",
     placeholder: "Re-enter your email address"
+  },
+]
+
+const basicDetailsSecondFields: FormField[] = [
+  {
+    name: 'selectRoles',
+    label: 'SELECT ALL THAT APPLIES',
+    type: 'select',
+    placeholder: 'Select',
+    options: creativeRoles.map(role => ({
+      label: role,
+      value: role,
+      disabled: role !== 'PHOTOGRAPHER' && role !== 'VIDEOGRAPHER'
+    })),
+    multiselect: true,
+    maxSelections: 3
   },
   {
     name: "phoneNumber",
@@ -130,7 +134,7 @@ const modalVariants = {
 };
 
 export default function SignupModal({ isOpen, onClose }: SignupModalProps) {
-  const [step, setStep] = useState<"userType" | "roleSelection" | "questions"|"success">("userType");
+  const [step, setStep] = useState<"userType" | "basicDetails" | "roleSelection" | "success">("userType");
   const [userType, setUserType] = useState<"agent" | "client" | "talent" | null>(null);
   const [basicDetails, setBasicDetails] = useState<FormData>({});
   const [formData, setFormData] = useState<FormData>({});
@@ -269,10 +273,10 @@ export default function SignupModal({ isOpen, onClose }: SignupModalProps) {
   // }
 
   const goBack = () => {
-    if (step === "roleSelection") {
+    if (step === "basicDetails") {
       setStep("userType");
-    } else if (step === "questions") {
-      setStep("roleSelection");
+    } else if (step === "roleSelection") {
+      setStep("basicDetails");
     }
   };
 
@@ -326,7 +330,7 @@ export default function SignupModal({ isOpen, onClose }: SignupModalProps) {
                 step === "userType" && (<h1 className="text-3xl font-bold mb-6 text-center">Join As</h1>)
               }
               {
-                ["roleSelection", "questions", "success"].includes(step) && (<h1 className="text-3xl font-bold text-center bg-white ">Create an account</h1>)
+                ["basicDetails", "roleSelection", "success"].includes(step) && (<h1 className="text-3xl font-bold text-center bg-white ">Create an account</h1>)
               }
             </div>
             {/* Content */}
@@ -338,10 +342,20 @@ export default function SignupModal({ isOpen, onClose }: SignupModalProps) {
                     setUserType={setUserType}
                     onContinue={() => {
                       if (userType === "client") return;
-                      if (userType === "agent" || userType === "talent") setStep("roleSelection");
+                      if (userType === "agent" || userType === "talent") setStep("basicDetails");
                     }}
                   />
                 )}
+                {
+                  step === "basicDetails" && (
+                    <SignupStepBasicDetails
+                      basicDetails={basicDetails}
+                      fields={basicDetailsFirstFields}
+                      handleBasicDetailsInputChange={handleInputChange(setBasicDetails)}
+                      onSubmit={() => setStep("roleSelection")}
+                    />
+                  )
+                }
                 {step === "roleSelection" && (
                   <SignupAccount
                     basicDetails={basicDetails}
@@ -350,7 +364,7 @@ export default function SignupModal({ isOpen, onClose }: SignupModalProps) {
                     handleBasicDetailsDropdownChange={handleDropdownChange(setBasicDetails)}
                     handleFormDataInputChange={handleInputChange(setFormData)}
                     handleFormDataFileChange={handleFileChange(setFormData)}
-                    fields={basicDetailsFields}
+                    fields={basicDetailsSecondFields}
                     isSubmitting={isSubmitting}
                     onSubmit={handleSubmit}
                   />
