@@ -44,6 +44,7 @@ import SignupFlow from '../signup/SignupFlow';
 import SignupModal from '../signup/SignupModal';
 import React, { lazy, Suspense } from 'react';
 import { useContentManager } from '@/hooks/useContentManager';
+import Hero2 from './hero2';
 
 // Import the WhySourcedSection component lazily
 const WhySourcedSection = lazy(() => import('./why-sourced').then(mod => ({ default: mod.WhySourcedSection })));
@@ -240,52 +241,7 @@ export default function Home() {
             />
 
             {/* Hero Section */}
-            <motion.section
-              className="relative flex flex-col items-center justify-center h-[80vh] md:h-screen w-full text-center"
-              initial="hidden"
-              whileInView="visible"
-              variants={stickyRevealVariants}
-              viewport={{ once: true, amount: 0.2 }}
-            >
-              {/* Background Image */}
-              <div className="absolute inset-0 w-full h-[80vh] md:h-screen">
-                <Image
-                  src={heroImage}
-                  alt="Creative Network"
-                  fill
-                  style={{ objectFit: "cover" }}
-                  className="w-full h-full object-cover"
-                />
-                {/* Dark overlay for readability */}
-                <div className="absolute inset-0 bg-black/10 backdrop-blur-sm"></div>
-                {/* <VelocityScroll
-                  numRows={1}
-                  defaultVelocity={0.8}
-                  className={`absolute bottom-20 text-2xl text-[#c0c0c0] tracking-normal font-thin italic ${GarmondI.className}`}
-                >
-                  {launchingText}
-                </VelocityScroll> */}
-              </div>
-              {/* Hero Content */}
-              <div className="relative z-10">
-                <h2 className="text-3xl md:text-6xl font-bold leading-tight tracking-wide text-white uppercase text-center">
-                  {heroTitle}
-                </h2>
-                <MorphingText
-                  className='text-center uppercase tracking-wide text-white'
-                  texts={morphingTexts}
-                />
-                <p className={`text-lg md:text-xl text-gray-500 -translate-y-5 ${GarmondI.className}`}>
-                  {heroSubtitle}
-                </p>
-                {/* CTA Buttons */}
-                <div className="flex items-center justify-center mt-8">
-                  <div className="w-full max-w-xs md:max-w-none flex justify-center">
-                    <SignupFlow onOpenChange={setModalOpen} />
-                  </div>
-                </div>
-              </div>
-            </motion.section>
+            <Hero2 onModalOpenChange={setModalOpen}></Hero2>
 
             {/* Why Sourced Section */}
             
