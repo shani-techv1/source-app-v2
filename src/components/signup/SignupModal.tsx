@@ -46,6 +46,14 @@ const basicDetailsFirstFields: FormField[] = [
   },
 ]
 
+const ROLES = {
+  PHOTOGRAPHER: "PHOTOGRAPHER",
+  VIDEOGRAPHER: "VIDEOGRAPHER",
+  VEHICLE_OWNER: "VEHICLE OWNER"
+}
+
+const enableRoles = [ROLES.PHOTOGRAPHER, ROLES.VIDEOGRAPHER, ROLES.VEHICLE_OWNER];
+
 const basicDetailsSecondFields: FormField[] = [
   {
     name: 'selectRoles',
@@ -55,7 +63,7 @@ const basicDetailsSecondFields: FormField[] = [
     options: creativeRoles.map(role => ({
       label: role,
       value: role,
-      disabled: role !== 'PHOTOGRAPHER' && role !== 'VIDEOGRAPHER'
+      disabled: !enableRoles.includes(role)
     })),
     multiselect: true,
     maxSelections: 3
@@ -256,9 +264,9 @@ export default function SignupModal({ isOpen, onClose }: SignupModalProps) {
 
   const getRoleId = (role: CreativeRole) => {
     const rolesMap = {
-      "PHOTOGRAPHER": 1,
-      "VIDEOGRAPHER": 2,
-      "VEHICLE OWNER": 3
+      [ROLES.PHOTOGRAPHER]: 1,
+      [ROLES.VIDEOGRAPHER]: 2,
+      [ROLES.VEHICLE_OWNER]: 3
     } as const;
     return rolesMap[role as keyof typeof rolesMap] || 0;
   }
