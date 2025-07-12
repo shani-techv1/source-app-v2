@@ -7,6 +7,7 @@ import { SignupStepQuestions } from "./SignupStepQuestions";
 import { GoogleIcon } from "../ui/GoogleIcon";
 import { FacebookIcon } from "../ui/FacebookIcon";
 import { AppleIcon } from "../ui/AppleIcon";
+import { Loader } from "../ui/Loader";
 
 interface SignupAccountProps {
   basicDetails: Record<string, string | string[] | File[] | null>;
@@ -17,7 +18,7 @@ interface SignupAccountProps {
   handleBasicDetailsDropdownChange?: (name: string, value: string | string[]) => void;
   handleFormDataInputChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
   handleFormDataFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onContinue: () => void;
+  onSubmit: () => void;
 }
 
 export default function SignupAccount({ 
@@ -29,11 +30,11 @@ export default function SignupAccount({
   handleBasicDetailsDropdownChange, 
   handleFormDataInputChange, 
   handleFormDataFileChange, 
-  onContinue 
+  onSubmit
 }: SignupAccountProps) {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onContinue();
+    onSubmit();
   };
 
   // Helper for Dropdown change
@@ -104,10 +105,11 @@ export default function SignupAccount({
         <div className="flex justify-center pt-6">
           <button 
             type="submit" 
-            className="w-96 py-4 bg-black text-white text-xl font-bold rounded-lg uppercase tracking-wide hover:bg-gray-800 transition-colors"
+            className="w-64 py-3 bg-black text-white text-xl font-bold rounded-lg uppercase tracking-wide hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
             disabled={isSubmitting}
           >
-            {isSubmitting ? "Processing..." : "Continue"}
+            {isSubmitting && <Loader size="sm" className="text-white" />}
+            Submit
           </button>
         </div>
       </form>

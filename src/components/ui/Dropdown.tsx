@@ -1,7 +1,8 @@
 import React, { useRef, useState, useEffect } from "react";
 import { createPortal } from "react-dom";
-import { ChevronDown, X } from "lucide-react";
-import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "./tooltip";
+import { ChevronDown } from "lucide-react";
+import { TooltipProvider } from "./tooltip";
+import { SelectedChip } from "./SelectedChip";
 
 export interface DropdownOption<T = string> {
   label: string;
@@ -232,7 +233,7 @@ export function Dropdown<T = string>({
           ref={buttonRef}
           type="button"
           disabled={disabled}
-          className={`w-full  text-left border border-gray-300 rounded-lg px-4 py-3 text-base bg-white focus:outline-none focus:border-black focus:border-[1.5px] transition-all flex items-center justify-between ${disabled ? "bg-gray-100 cursor-not-allowed" : "cursor-pointer"} ${open ? "border-black border-[1.5px]" : ""}`}
+          className={`w-full h-[50px] text-left border border-gray-300 rounded-lg p-3 text-base bg-white focus:outline-none focus:border-black focus:border-[1.5px] transition-all flex items-center justify-between ${disabled ? "bg-gray-100 cursor-not-allowed" : "cursor-pointer"} ${open ? "border-black border-[1.5px]" : ""}`}
           onClick={() => setOpen(o => !o)}
           onKeyDown={handleKeyDown}
           aria-haspopup="listbox"
@@ -240,33 +241,18 @@ export function Dropdown<T = string>({
         >
           <div className="flex-1 min-w-0">
             {multiselect && Array.isArray(value) && value.length > 0 ? (
-              <div className="flex overflow-auto gap-1">
-                               {value.slice(0, 2).map((selectedValue) => {
-                   const selected = options.find(opt => opt.value === selectedValue);
-                  return (
-                    <Tooltip key={String(selectedValue)}>
-                      <TooltipTrigger asChild>
-                        <span
-                          className="inline-flex items-center gap-1 bg-gray-100 px-2 py-0.5 rounded text-[0.75rem]"
-                        >
-                          <span className="truncate max-w-16">{selected?.label}</span>
-                          <div
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              removeSelection(selectedValue);
-                            }}
-                            className="ml-1 hover:bg-gray-200 rounded-full p-0.5"
-                          >
-                            <X className="w-3 h-3" />
-                          </div>
-                        </span>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>{selected?.label}</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  );
-                })}
+                          <div className="flex overflow-auto gap-1">
+                             {value.slice(0, 2).map((selectedValue) => {
+                 const selected = options.find(opt => opt.value === selectedValue);
+                return (
+                  <SelectedChip
+                    key={String(selectedValue)}
+                    label={selected?.label || ''}
+                    value={selectedValue}
+                    onRemove={removeSelection}
+                  />
+                );
+              })}
                 {value.length > 2 && (
                   <span className="text-gray-500 text-xs">+{value.length - 2} more</span>
                 )}
