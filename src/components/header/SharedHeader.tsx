@@ -70,93 +70,94 @@ export default function SharedHeader({
           </div>
 
           {/* Desktop Navigation - Hidden on Mobile */}
-          <div className="hidden md:flex items-center px-2 bg-white/70 backdrop-blur-sm py-1 rounded-sm">
-            {/* Nav Items with pill-shaped backgrounds */}
-            <nav className="flex items-center space-x-3">
-              {/* How It Works Dropdown */}
-              <div className="relative">
-                <button
-                  className="text-black px-4 py-2 rounded-full text-sm font-medium hover:bg-white transition-colors cursor-pointer flex items-center gap-1"
-                  onMouseEnter={() => setShowHowItWorksDropdown(true)}
-                  onMouseLeave={() => setShowHowItWorksDropdown(false)}
-                >
-                  HOW IT WORKS
-                  <ChevronDown className="h-3 w-3" />
-                </button>
-                
-                {showHowItWorksDropdown && (
-                  <div
-                    className="absolute top-full left-0 mt-2 w-48 bg-white rounded-lg shadow-lg border py-2 z-50"
+          <div className="hidden md:flex items-center space-x-6">
+            <div className="hidden md:flex items-center px-2 bg-white/70 backdrop-blur-sm py-1 rounded-sm">
+              {/* Nav Items with pill-shaped backgrounds */}
+              <nav className="flex items-center space-x-3">
+                {/* How It Works Dropdown */}
+                <div className="relative">
+                  <button
+                    className="text-black px-4 py-2 rounded-full text-sm font-medium hover:bg-white transition-colors cursor-pointer flex items-center gap-1"
                     onMouseEnter={() => setShowHowItWorksDropdown(true)}
                     onMouseLeave={() => setShowHowItWorksDropdown(false)}
                   >
-                    {howItWorksMenuItems.map((item, index) => (
-                      <a
-                        key={index}
-                        href={item.url}
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
-                      >
-                        {item.label}
-                      </a>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              {/* Company Dropdown */}
-              <div className="relative">
-                <button
-                  className="text-black px-4 py-2 rounded-full text-sm font-medium hover:bg-white transition-colors cursor-pointer flex items-center gap-1"
-                  onMouseEnter={() => setShowCompanyDropdown(true)}
-                  onMouseLeave={() => setShowCompanyDropdown(false)}
-                >
-                  COMPANY
-                  <ChevronDown className="h-3 w-3" />
-                </button>
-                
-                {showCompanyDropdown && (
-                  <div
-                    className="absolute top-full left-0 mt-2 w-48 bg-white rounded-lg shadow-lg border py-2 z-50"
+                    HOW IT WORKS
+                    <ChevronDown className="h-3 w-3" />
+                  </button>
+            
+                  {showHowItWorksDropdown && (
+                    <div
+                      className="absolute top-full left-0 mt-2 w-48 bg-white rounded-lg shadow-lg border py-2 z-50"
+                      onMouseEnter={() => setShowHowItWorksDropdown(true)}
+                      onMouseLeave={() => setShowHowItWorksDropdown(false)}
+                    >
+                      {howItWorksMenuItems.map((item, index) => (
+                        <a
+                          key={index}
+                          href={item.url}
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                        >
+                          {item.label}
+                        </a>
+                      ))}
+                    </div>
+                  )}
+                </div>
+                {/* Company Dropdown */}
+                <div className="relative">
+                  <button
+                    className="text-black px-4 py-2 rounded-full text-sm font-medium hover:bg-white transition-colors cursor-pointer flex items-center gap-1"
                     onMouseEnter={() => setShowCompanyDropdown(true)}
                     onMouseLeave={() => setShowCompanyDropdown(false)}
                   >
-                    {companyMenuItems.map((item, index) => (
-                      <a
-                        key={index}
-                        href={item.url}
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
-                      >
-                        {item.label}
-                      </a>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </nav>
+                    COMPANY
+                    <ChevronDown className="h-3 w-3" />
+                  </button>
             
-            {/* Headphone Icon */}
-            <div className="ml-2">
-              <button 
-                className="p-2 hover:bg-white/20 rounded-full transition-colors"
-                onClick={openChat}
-                disabled={!isLoaded}
-                aria-label="Support"
-              >
-                <svg
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="text-black"
-                >
-                  <path
-                    d="M12 1C7.03 1 3 5.03 3 10v4c0 1.1.9 2 2 2h2c1.1 0 2-.9 2-2v-2c0-1.1-.9-2-2-2H5c0-3.87 3.13-7 7-7s7 3.13 7 7h-2c-1.1 0-2 .9-2 2v2c0 1.1.9 2 2 2h2c1.1 0 2-.9 2-2v-4c0-4.97-4.03-9-9-9z"
-                    fill="currentColor"
-                  />
-                </svg>
-              </button>
+                  {showCompanyDropdown && (
+                    <div
+                      className="absolute top-full left-0 mt-2 w-48 bg-white rounded-lg shadow-lg border py-2 z-50"
+                      onMouseEnter={() => setShowCompanyDropdown(true)}
+                      onMouseLeave={() => setShowCompanyDropdown(false)}
+                    >
+                      {companyMenuItems.map((item, index) => (
+                        <a
+                          key={index}
+                          href={item.url}
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                        >
+                          {item.label}
+                        </a>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </nav>
+            
+              {/* Headphone Icon */}
             </div>
+            <div className="ml-2">
+                <button
+                  className="p-2 hover:bg-white/20 rounded-full transition-colors"
+                  onClick={openChat}
+                  disabled={!isLoaded}
+                  aria-label="Support"
+                >
+                  <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="text-black"
+                  >
+                    <path
+                      d="M12 1C7.03 1 3 5.03 3 10v4c0 1.1.9 2 2 2h2c1.1 0 2-.9 2-2v-2c0-1.1-.9-2-2-2H5c0-3.87 3.13-7 7-7s7 3.13 7 7h-2c-1.1 0-2 .9-2 2v2c0 1.1.9 2 2 2h2c1.1 0 2-.9 2-2v-4c0-4.97-4.03-9-9-9z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </button>
+              </div>
           </div>
 
           {/* Mobile Menu Button and Support */}
