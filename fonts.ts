@@ -26,4 +26,6 @@ export const GarmondI = localFont({
 export const creato_display = localFont({
   src: './cd.woff2',
   display: 'swap',
+  weight: '400',
+  style: 'normal',
 })

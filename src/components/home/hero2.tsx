@@ -28,14 +28,14 @@ const Hero2 = ({ onModalOpenChange }: Hero2Props) => {
         className="w-full h-full object-cover object-center"
       />
 
-      <div className="absolute left-0 right-0 bottom-0 bg-white p-8 lg:p-16">
-        <div className="flex flex-row justify-between items-center w-full">
+      <div className="absolute left-0 right-0 bottom-0 bg-white p-2 lg:p-16">
+        <div className="flex flex-col md:flex-row justify-between items-center w-full">
           <div>
             <motion.h1
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="text-4xl sm:text-5xl md:text-5xl lg:text-5xl font-light text-black leading-tight"
+              className="text-2xl sm:text-4xl md:text-5xl lg:text-5xl font-light text-black leading-tight"
               style={{
                 fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, sans-serif',
                 fontWeight: 300,
@@ -48,7 +48,7 @@ const Hero2 = ({ onModalOpenChange }: Hero2Props) => {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
-              className="mt-4 text-xl sm:text-2xl md:text-3xl font-light text-gray-700 leading-relaxed"
+              className="mt-2 sm:mt-4 text-lg sm:text-2xl md:text-3xl font-light text-gray-700 leading-relaxed"
               style={{
                 fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, sans-serif',
                 fontWeight: 300,
@@ -62,7 +62,7 @@ const Hero2 = ({ onModalOpenChange }: Hero2Props) => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.6 }}
-            className=""
+            className="mt-2"
           >
             <SignupFlow onOpenChange={onModalOpenChange} />
           </motion.div>
