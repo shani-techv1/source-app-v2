@@ -93,8 +93,8 @@ export const Footer: FC = () => {
   });
 
   return (
-    <footer className="w-full bg-white mt-16 py-16 px-6 md:px-16 border-t border-gray-400">
-      <div className="max-w-screen-2xl mx-auto flex flex-col md:flex-row justify-between gap-12">
+    <footer className="w-full bg-white mt-16 py-12 md:py-16 border-t border-gray-400">
+      <div className="max-w-screen-2xl px-6 md:px-16 mx-auto flex flex-col md:flex-row justify-between gap-12">
         {/* LEFT: Subscription Box */}
         <div className="flex-1 p-8 rounded-3xl bg-gray-100 flex flex-col items-start justify-center">
           <h3 className="text-xl font-bold">{subscriptionTitle}</h3>
@@ -202,9 +202,9 @@ export const Footer: FC = () => {
       </motion.div>
       
       {/* Copyright and Legal Links */}
-      <div className="max-w-screen-2xl mx-auto flex flex-col sm:flex-row justify-between items-start sm:items-center text-base text-gray-500
+      <div className="mx-auto flex flex-col sm:flex-row justify-between items-start sm:items-center text-base text-gray-500
       border-t border-black
-      py-6 gap-6">
+      py-6 px-6 gap-6">
         <div>{copyrightText}</div>
         <div className="flex space-x-6">
           <a href="/terms" className="hover:text-black transition-colors">Terms & Conditions</a>
