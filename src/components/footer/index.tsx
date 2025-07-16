@@ -93,30 +93,31 @@ export const Footer: FC = () => {
   });
 
   return (
-    <footer className="w-full bg-white mt-16 py-12 md:py-16 border-t border-gray-400">
-      <div className="max-w-screen-2xl px-6 md:px-16 mx-auto flex flex-col md:flex-row justify-between gap-12">
+    <footer className="w-full bg-white mt-16 py-12 md:py-16 border-gray-400">  {/* removed border-t class untill footer has been asked to reinstate  */}
+      
+      {/* <div className="max-w-screen-2xl px-6 md:px-16 mx-auto flex flex-col md:flex-row justify-between gap-12"> */}
         {/* LEFT: Subscription Box */}
-        <div className="flex-1 p-8 rounded-3xl bg-gray-100 flex flex-col items-start justify-center">
-          <h3 className="text-xl font-bold">{subscriptionTitle}</h3>
-          <p className="text-base mt-2 mb-6 text-black/80">{subscriptionSubtitle}</p>
+        {/* <div className="flex-1 p-8 rounded-3xl bg-gray-100 flex flex-col items-start justify-center"> */}
+          {/* <h3 className="text-xl font-bold">{subscriptionTitle}</h3> */}
+          {/* <p className="text-base mt-2 mb-6 text-black/80">{subscriptionSubtitle}</p> */}
 
           {/* Email + Subscribe */}
-          <div className="flex flex-col sm:flex-row gap-4 w-full">
-            <input
+          {/* <div className="flex flex-col sm:flex-row gap-4 w-full"> */}
+            {/* <input
               type="email"
               placeholder="Enter your email"
               className="rounded-full border border-black px-6 py-3 text-base flex-1 placeholder-gray-400 focus:outline-none"
-            />
-            <button className="bg-black text-white px-8 py-3 rounded-full text-base font-semibold tracking-widest flex items-center justify-center gap-2">
+            /> */}
+            {/* <button className="bg-black text-white px-8 py-3 rounded-full text-base font-semibold tracking-widest flex items-center justify-center gap-2">
               SUBSCRIBE
               <PlusCircle width={18} height={18} />
-            </button>
-          </div>
-        </div>
+            </button> */}
+          {/* </div> */}
+        {/* </div> */}
 
         {/* RIGHT: Dynamic Navigation Columns */}
-        <div className="flex-[1.2] flex flex-wrap md:flex-nowrap gap-12 uppercase">
-          {parsedColumns.map((column, index) => (
+        {/* <div className="flex-[1.2] flex flex-wrap md:flex-nowrap gap-12 uppercase"> */}
+          {/* {parsedColumns.map((column, index) => (
             <div key={index} className="min-w-[140px]">
               <h4 className="font-semibold text-gray-500 uppercase text-sm mb-4">
                 {column.title}
@@ -134,16 +135,16 @@ export const Footer: FC = () => {
                 ))}
               </ul>
             </div>
-          ))}
+          ))} */}
 
           {/* SOCIAL MEDIA COLUMN */}
-          <div className="min-w-[140px]">
-            <h4 className="font-semibold text-gray-500 uppercase text-sm mb-4">
+          {/* <div className="min-w-[140px]"> */}
+            {/* <h4 className="font-semibold text-gray-500 uppercase text-sm mb-4">
               Social Media
-            </h4>
-            <ul className="space-y-3 text-base text-black">
+            </h4> */}
+            {/* <ul className="space-y-3 text-base text-black"> */}
               {/* Instagram */}
-              <li className="group relative inline-flex items-center">
+              {/* <li className="group relative inline-flex items-center">
                 <a href="#" className="hover:font-medium flex items-center">
                   Instagram
                   <ArrowUpRight
@@ -153,10 +154,10 @@ export const Footer: FC = () => {
                     className="transform opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition duration-300"
                   />
                 </a>
-              </li>
+              </li> */}
 
               {/* LinkedIn */}
-              <li className="group relative inline-flex items-center">
+              {/* <li className="group relative inline-flex items-center">
                 <a href="#" className="hover:font-medium flex items-center">
                   LinkedIn
                   <ArrowUpRight
@@ -166,17 +167,17 @@ export const Footer: FC = () => {
                     className="transform opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition duration-300"
                   />
                 </a>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
+              </li> */}
+            {/* </ul> */}
+          {/* </div> */}
+        {/* </div> */}
+      {/* </div> */}
 
       {/* Divider */}
-      <div className="h-px bg-gray-200 my-16"></div>
+      {/* <div className="h-px bg-gray-200 my-16"></div> */}
       
       {/* Large Brand Logo with Animation */}
-      <motion.div 
+      {/* <motion.div 
         ref={ref}
         className="max-w-screen-2xl mx-auto mb-20 overflow-hidden"
         initial="hidden"
@@ -199,7 +200,7 @@ export const Footer: FC = () => {
             </motion.span>
           ))}
         </h1>
-      </motion.div>
+      </motion.div> */}
       
       {/* Copyright and Legal Links */}
       <div className="mx-auto flex flex-col sm:flex-row justify-between items-start sm:items-center text-base text-gray-500

@@ -75,11 +75,9 @@ export default function SharedHeader({
               {/* Nav Items with pill-shaped backgrounds */}
               <nav className="flex items-center space-x-3">
                 {/* How It Works Dropdown */}
-                <div className="relative">
+                <div className="relative" onMouseEnter={() => setShowHowItWorksDropdown(true)} onMouseLeave={() => setShowHowItWorksDropdown(false)}>
                   <button
-                    className="text-black px-4 py-2 rounded-full text-sm font-medium hover:bg-white transition-colors cursor-pointer flex items-center gap-1"
-                    onMouseEnter={() => setShowHowItWorksDropdown(true)}
-                    onMouseLeave={() => setShowHowItWorksDropdown(false)}
+                    className="text-black px-4 py-2 rounded-full text-sm font-medium transition-colors cursor-pointer flex items-center gap-1"
                   >
                     HOW IT WORKS
                     <ChevronDown className="h-3 w-3" />
@@ -87,9 +85,7 @@ export default function SharedHeader({
             
                   {showHowItWorksDropdown && (
                     <div
-                      className="absolute top-full left-0 mt-2 w-48 bg-white rounded-lg shadow-lg border py-2 z-50"
-                      onMouseEnter={() => setShowHowItWorksDropdown(true)}
-                      onMouseLeave={() => setShowHowItWorksDropdown(false)}
+                      className="absolute top-full left-0 mt-0 w-48 bg-white rounded-lg shadow-lg border py-2 z-50"
                     >
                       {howItWorksMenuItems.map((item, index) => (
                         <a
@@ -104,11 +100,9 @@ export default function SharedHeader({
                   )}
                 </div>
                 {/* Company Dropdown */}
-                <div className="relative">
+                <div className="relative" onMouseEnter={() => setShowCompanyDropdown(true)} onMouseLeave={() => setShowCompanyDropdown(false)}>
                   <button
-                    className="text-black px-4 py-2 rounded-full text-sm font-medium hover:bg-white transition-colors cursor-pointer flex items-center gap-1"
-                    onMouseEnter={() => setShowCompanyDropdown(true)}
-                    onMouseLeave={() => setShowCompanyDropdown(false)}
+                    className="text-black px-4 py-2 rounded-full text-sm font-medium transition-colors cursor-pointer flex items-center gap-1"
                   >
                     COMPANY
                     <ChevronDown className="h-3 w-3" />
@@ -116,9 +110,7 @@ export default function SharedHeader({
             
                   {showCompanyDropdown && (
                     <div
-                      className="absolute top-full left-0 mt-2 w-48 bg-white rounded-lg shadow-lg border py-2 z-50"
-                      onMouseEnter={() => setShowCompanyDropdown(true)}
-                      onMouseLeave={() => setShowCompanyDropdown(false)}
+                      className="absolute top-full left-0 mt-0 w-48 bg-white rounded-lg shadow-lg border py-2 z-50"
                     >
                       {companyMenuItems.map((item, index) => (
                         <a
@@ -136,9 +128,9 @@ export default function SharedHeader({
             
               {/* Headphone Icon */}
             </div>
-            <div className="ml-2">
+            <div className="">
                 <button
-                  className="p-2 hover:bg-white/20 rounded-full transition-colors"
+                  className="px-2 py-2 mt-2 transition-colors"
                   onClick={openChat}
                   disabled={!isLoaded}
                   aria-label="Support"
