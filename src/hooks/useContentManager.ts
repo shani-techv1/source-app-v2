@@ -217,11 +217,13 @@ export const useContentManager = () => {
 
   useEffect(() => {
     // Load content from localStorage (in production, this would be an API call)
-    const loadContent = () => {
+    const loadContent = async () => {
       try {
-        const savedContent = localStorage.getItem('site-content');
-        if (savedContent) {
-          const parsedContent = JSON.parse(savedContent);
+        // const savedContent = localStorage.getItem('site-content');
+        const savedContent = await fetch('/api/content');
+        if (savedContent.ok) {
+          const parsedContent = await savedContent.json();
+          console.log("parsedContent:",parsedContent);
           // Merge with default content to ensure all sections exist
           const mergedContent = {
             ...defaultContent,
