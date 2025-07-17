@@ -1,5 +1,4 @@
 import React from "react";
-import { InteractiveHoverButton } from "../magicui/interactive-hover-button";
 
 /**
  * A simple full-width, fixed-height text mask
@@ -39,7 +38,7 @@ export default function TextMask() {
                 fontWeight="bold"
                 textAnchor="middle"
                 alignmentBaseline="middle"
-                fontFamily="sans-serif"
+                fontFamily="var(--font-family, sans-serif)"
               >
                 NAJBARDZIEJ
               </text>

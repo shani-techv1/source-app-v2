@@ -25,6 +25,27 @@ interface ApiResponse {
   general?: ContentItem[];
 }
 export const dynamic = 'force-dynamic';
+
+
+async function getFontSettings() {
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/fonts`, {
+      cache: 'no-store' // Ensure fresh data
+    });
+    const data = await response.json();
+
+    const fontFamily = Array.isArray(data?.fonts) ? data?.fonts[0] : data?.fonts;
+    
+    const fontUrl = fontFamily
+      ? `https://fonts.googleapis.com/css2?family=${fontFamily.replace(/ /g, '+')}&display=swap`
+      : '';
+    
+    return { fontUrl, fontFamily };
+  } catch (error) {
+    console.error('Error fetching font settings:', error);
+    return { fontUrl: '', fontFamily: 'Inter Tight' };
+  }
+}
 // Dynamic metadata function that reads from the content API
 export async function generateMetadata(): Promise<Metadata> {
   try {
@@ -94,15 +115,20 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const { fontUrl, fontFamily } = await getFontSettings();
   return (
     <html lang="en">
       <head>
-        <link rel="stylesheet" href="https://use.typekit.net/bvm3wii.css" />
+        {/* <link rel="stylesheet" href="https://use.typekit.net/bvm3wii.css" /> */}
+        {fontUrl && <link rel="stylesheet" href={fontUrl} />}
+        <style>{`:root { --font-family: ${fontFamily ? `"${fontFamily}", sans-serif` : 'system-ui, sans-serif'}; }`}</style>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>
       <body
         className={`antialiased`}

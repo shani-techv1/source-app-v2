@@ -16,16 +16,11 @@ async function main() {
     console.log('Connecting to database...');
     await dbConnect();
 
-    console.log('Checking for existing content...');
-    const count = await Content.countDocuments();
-    
-    if (count > 0) {
-      console.log('Content already exists in the database. Skipping seeding.');
-      await mongoose.disconnect();
-      return;
-    }
+    console.log('Clearing existing content...');
+    await Content.deleteMany({});
+    console.log('Existing content cleared.');
 
-    console.log('No content found. Seeding default content...');
+    console.log('Seeding default content...');
 
     const defaultContent = [
       {
@@ -64,7 +59,14 @@ async function main() {
         items: [
           { id: 'site-title', title: 'Site Title', type: 'text', value: 'Sourced - Creative Network', placeholder: 'Enter site title' },
           { id: 'meta-description', title: 'Meta Description', type: 'textarea', value: 'Sourced simplifies creative connections. Find and hire top photographers, videographers, models, and more.', placeholder: 'Enter meta description', maxLength: 160 },
-          { id: 'site-favicon', title: 'Site Favicon', type: 'image', value: '/favicon.ico', placeholder: 'Upload favicon (16x16 or 32x32 pixels, .ico or .png format)' }
+          { id: 'site-favicon', title: 'Site Favicon', type: 'image', value: '/favicon.ico', placeholder: 'Upload favicon (16x16 or 32x32 pixels, .ico or .png format)' },
+          {
+            id: 'google-font',
+            title: 'Google Font',
+            type: 'text',
+            value: 'Inter Tight',
+            placeholder: 'Enter Google Font name'
+          }
         ]
       },
       {

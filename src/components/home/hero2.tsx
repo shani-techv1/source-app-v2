@@ -35,9 +35,8 @@ const Hero2 = ({ onModalOpenChange }: Hero2Props) => {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="text-2xl sm:text-4xl md:text-5xl lg:text-5xl font-light text-black leading-tight"
+              className="text-2xl sm:text-4xl md:text-5xl lg:text-5xl font-light text-black leading-tight font-sans"
               style={{
-                fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, sans-serif',
                 fontWeight: 300,
                 letterSpacing: '-0.02em'
               }}
@@ -48,9 +47,8 @@ const Hero2 = ({ onModalOpenChange }: Hero2Props) => {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
-              className="mt-2 sm:mt-4 text-lg sm:text-2xl md:text-3xl font-light text-gray-700 leading-relaxed"
+              className="mt-2 sm:mt-4 text-lg sm:text-2xl md:text-3xl font-light text-gray-700 leading-relaxed font-sans"
               style={{
-                fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, sans-serif',
                 fontWeight: 300,
                 letterSpacing: '-0.01em'
               }}

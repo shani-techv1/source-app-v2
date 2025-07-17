@@ -25,7 +25,7 @@ export default function Header2() {
               fontSize="45"
               fontWeight="bold"
               fill="black"
-              fontFamily="serif"
+              fontFamily="var(--font-family, serif)"
             >
               ()
             </text>

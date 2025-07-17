@@ -149,6 +149,13 @@ export async function GET() {
             type: 'image',
             value: '/favicon.ico',
             placeholder: 'Upload favicon (16x16 or 32x32 pixels, .ico or .png format)'
+          },
+          {
+            id: 'google-font',
+            title: 'Google Font',
+            type: 'text',
+            value: 'Inter Tight',
+            placeholder: 'Enter Google Font name'
           }
         ],
         whySourced: [
