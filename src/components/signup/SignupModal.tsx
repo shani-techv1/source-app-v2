@@ -311,12 +311,12 @@ export default function SignupModal({ isOpen, onClose }: SignupModalProps) {
             initial="hidden"
             animate="visible"
             exit="exit"
-            className={cn("bg-white rounded-2xl shadow-2xl w-full max-w-2xl flex flex-col max-h-[90vh]", step === "userType" ? "max-w-2xl" : "max-w-5xl")}
+            className={cn("bg-white rounded-sm shadow-2xl w-full max-w-2xl flex flex-col gap-6 max-h-[90vh] box-border p-6 pt-12 md:p-12", step === "userType" ? "max-w-lg" : "max-w-5xl")}
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}
-            <div className="flex-shrink-0 bg-white px-6 py-4 rounded-t-2xl z-50">
-              <div className="flex items-center justify-between">
+            <div className="flex-shrink-0 bg-white rounded-t-2xl z-50 relative">
+              <div className="flex items-center justify-between absolute w-full -top-8 left-1/2 -translate-x-1/2">
               {step !== "userType" && (
                     <button 
                       onClick={goBack}
@@ -335,14 +335,14 @@ export default function SignupModal({ isOpen, onClose }: SignupModalProps) {
                   </button>
               </div>
               {
-                step === "userType" && (<h1 className="text-3xl font-bold mb-6 text-center">Join As</h1>)
+                step === "userType" && (<h1 className="text-3xl font-bold text-center">Join As</h1>)
               }
               {
                 ["basicDetails", "roleSelection", "success"].includes(step) && (<h1 className="text-3xl font-bold text-center bg-white ">Create an account</h1>)
               }
             </div>
             {/* Content */}
-            <div className="flex-1 p-6 overflow-y-auto">
+            <div className="flex-1 overflow-y-auto">
               <AnimatePresence mode="wait">
                 {step === "userType" && (
                   <SignupStepUserType
