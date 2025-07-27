@@ -49,11 +49,11 @@ const WhySourcedSection = ({ onModalOpenChange }: WhySourcedSectionProps) => {
   });
 
   return (
-    <section className="py-16 md:py-24 px-4 md:px-12 ">
-      <div className="max-w-5xl mx-auto">
+    <section className="py-14 md:py-24 px-4 md:px-24">
+      <div className="mx-auto">
         {/* Section Header */}
-        <div className="mb-12">
-          <div className="inline-block bg-gray-100 px-4 py-2 rounded-full mb-4">
+        <div className="mb-20">
+          <div className="inline-block bg-gray-100 px-4 py-2 rounded-full mb-8">
             <span className="text-sm font-medium">{whySourcedBadge}</span>
           </div>
 
@@ -75,9 +75,9 @@ const WhySourcedSection = ({ onModalOpenChange }: WhySourcedSectionProps) => {
         </div>
 
         {/* Dynamic Accordion Sections */}
-        <div className="w-full space-y-6">
+        <div className="w-full space-y-6 px-12">
           {parsedAccordions.map((accordion) => (
-            <div key={accordion.id} className="p-4 pr-10 rounded-3xl bg-gray-100">
+            <div key={accordion.id} className="pl-14 pr-10 py-8 rounded-3xl bg-gray-100">
               <details className="group" open={accordion.isOpen}>
                 <summary className="flex items-center justify-between cursor-pointer list-none">
                   <div className="flex items-center">
@@ -87,11 +87,11 @@ const WhySourcedSection = ({ onModalOpenChange }: WhySourcedSectionProps) => {
                   <img 
                     src="/arrow2.svg" 
                     alt="Chevron Down" 
-                    className="h-6 w-10 shrink-0 text-gray-400 transition-transform group-open:rotate-180" 
+                    className="h-4 w-6 shrink-0 text-gray-400 transition-transform group-open:rotate-180" 
                   />
                 </summary>
                 <div className="pt-4 text-base">
-                  <p className="text-gray-600 pl-[50px] md:pl-[300px] text-xl md:text-2xl font-thin">
+                  <p className="text-gray-600 pl-[50px] md:pl-[355px] text-xl md:text-2xl font-thin pr-10">
                     {accordion.description}
                   </p>
                 </div>

@@ -30,12 +30,12 @@ const Hero2 = ({ onModalOpenChange }: Hero2Props) => {
 
       <div className="absolute left-0 right-0 bottom-0 bg-white p-2 lg:p-16">
         <div className="flex flex-col md:flex-row justify-between items-center w-full">
-          <div>
+          <div className='space-y-0  '>
             <motion.h1
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="text-2xl sm:text-4xl md:text-5xl lg:text-5xl font-light text-black leading-tight font-sans"
+              className="text-2xl sm:text-4xl md:text-5xl lg:text-5xl font-light text-black leading-tight"
               style={{
                 fontWeight: 300,
                 letterSpacing: '-0.02em'
@@ -47,7 +47,7 @@ const Hero2 = ({ onModalOpenChange }: Hero2Props) => {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
-              className="mt-2 sm:mt-4 text-lg sm:text-2xl md:text-3xl font-light text-gray-700 leading-relaxed font-sans"
+              className="mt-2 sm:mt-4 text-2xl sm:text-4xl md:text-5xl lg:text-5xl font-light text-black leading-relaxed"
               style={{
                 fontWeight: 300,
                 letterSpacing: '-0.01em'

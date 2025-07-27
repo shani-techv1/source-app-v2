@@ -6,6 +6,8 @@ import { useContentManager } from '@/hooks/useContentManager';
 import { motion } from 'framer-motion';
 import SharedHeader from '@/components/header/SharedHeader';
 import { Footer } from '@/components/footer';
+import Contact from '@/components/pages/contact';
+import HowItWorks from '@/components/pages/how-it-works';
 
 interface PageData {
   slug: string;
@@ -51,7 +53,7 @@ export default function DynamicPage() {
 
   if (notFound) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50">
         <SharedHeader isTransparent={false} />
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -67,6 +69,31 @@ export default function DynamicPage() {
             Go Home
           </a>
         </motion.div>
+      </div>
+    );
+  }
+
+  // Check for custom page components first
+  if (slug === 'contact') {
+    return (
+      <div className="min-h-screen bg-white">
+        <SharedHeader isTransparent={false} />
+        <main className="pt-26">
+          <Contact />
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
+  if (slug === 'how-it-works') {
+    return (
+      <div className="min-h-screen bg-white">
+        <SharedHeader isTransparent={false} />
+        <main className="pt-26">
+          <HowItWorks />
+        </main>
+        <Footer />
       </div>
     );
   }

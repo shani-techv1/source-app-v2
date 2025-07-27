@@ -48,7 +48,7 @@ export default function SharedHeader({
   return (
     <>
       <header className={`${headerClasses} ${className}`}>
-        <div className="max-w-screen-xl mx-auto px-6 py-6 flex items-center justify-between">
+        <div className="max-w-[95%] mx-auto px-6 py-6 flex items-center justify-between">
           {/* Left Logo/Brand Name */}
           <div className="flex items-center">
             <Link href="/" className="flex items-center space-x-3">
