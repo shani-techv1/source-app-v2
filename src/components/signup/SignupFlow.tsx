@@ -453,14 +453,14 @@ export default function SignupFlow({ onOpenChange }: SignupFlowProps) {
   return (
     <button
       onClick={handleClick}
-      className="group relative w-full md:w-auto max-w-[300px] cursor-pointer overflow-hidden rounded-full bg-black p-2 px-4 md:px-8 py-4 text-center text-xs md:text-lg font-semibold uppercase tracking-tighter"
+      className="group relative w-full md:w-auto max-w-[300px] cursor-pointer overflow-hidden rounded-full bg-black p-2 px-6 md:px-12 py-6 text-center text-base md:text-lg font-semibold uppercase tracking-tighter"
     >
       <div className="flex items-center justify-center text-center gap-2">
         <span className="inline-block text-center transition-all duration-300 group-hover:translate-x-12 group-hover:opacity-0 text-white">
           Get started
         </span>
       </div>
-      <div className="absolute top-0 z-10 flex h-full w-full -translate-x-10 items-center justify-center gap-2 tracking-tighter text-primary-foreground opacity-0 transition-all duration-700 group-hover:-translate-x-6 group-hover:opacity-100">
+      <div className="absolute top-0 z-10 flex h-full w-full -translate-x-10 items-center justify-center gap-2 tracking-tighter text-primary-foreground opacity-0 transition-all duration-700 group-hover:-translate-x-11 group-hover:opacity-100">
         <span className="text-white">Get started</span>
       </div>
     </button>
