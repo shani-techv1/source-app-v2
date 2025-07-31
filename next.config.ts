@@ -11,6 +11,11 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
+        hostname: 'picsum.photos',
+        pathname: '/**'
+      },
+      {
+        protocol: 'https',
         hostname: 'cdn.shopify.com',
         pathname: '/s/files/**'
       },
