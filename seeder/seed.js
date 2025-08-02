@@ -58,6 +58,7 @@ async function main() {
         section: 'general',
         items: [
           { id: 'site-title', title: 'Site Title', type: 'text', value: 'Sourced - Creative Network', placeholder: 'Enter site title' },
+          { id: 'modal-title', title: 'Modal Title', type: 'text', value: 'Join as User', placeholder: 'Enter modal title' },
           { id: 'meta-description', title: 'Meta Description', type: 'textarea', value: 'Sourced simplifies creative connections. Find and hire top photographers, videographers, models, and more.', placeholder: 'Enter meta description', maxLength: 160 },
           { id: 'site-favicon', title: 'Site Favicon', type: 'image', value: '/favicon.ico', placeholder: 'Upload favicon (16x16 or 32x32 pixels, .ico or .png format)' },
           {
