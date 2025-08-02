@@ -41,19 +41,19 @@ export async function GET() {
             value: '/image.png',
             placeholder: 'Upload hero image'
           },
-          {
-            id: 'morphing-texts',
-            title: 'Morphing Text Options',
-            type: 'array',
-            value: [
-              'MODEL', 'INFLUENCER', 'ACTOR', 'STYLIST', 'HAIR STYLIST', 
-              'MAKEUP ARTIST', 'PHOTOGRAPHER', 'VIDEOGRAPHER', 'ASSISTANT', 'LIGHTING', 
-              'DIRECTOR', 'COSTUME DESIGNER', 'PRODUCER', 'SOUND ENGINEER', 'POST PRODUCTION', 
-              'WRITER', 'FIT MODEL', 'TALENT AGENT', 'SET DESIGNER', 'GRAPHIC DESIGNER', 
-              'VEHICLE OWNER', 'EQUIPTMENT', 'PROPS', 'LOCATION (STUDIOS, HOUSES & OTHER)', 
-              'BRAND', 'OTHER'
-            ]
-          },
+          // {
+          //   id: 'morphing-texts',
+          //   title: 'Morphing Text Options',
+          //   type: 'array',
+          //   value: [
+          //     'MODEL', 'INFLUENCER', 'ACTOR', 'STYLIST', 'HAIR STYLIST', 
+          //     'MAKEUP ARTIST', 'PHOTOGRAPHER', 'VIDEOGRAPHER', 'ASSISTANT', 'LIGHTING', 
+          //     'DIRECTOR', 'COSTUME DESIGNER', 'PRODUCER', 'SOUND ENGINEER', 'POST PRODUCTION', 
+          //     'WRITER', 'FIT MODEL', 'TALENT AGENT', 'SET DESIGNER', 'GRAPHIC DESIGNER', 
+          //     'VEHICLE OWNER', 'EQUIPTMENT', 'PROPS', 'LOCATION (STUDIOS, HOUSES & OTHER)', 
+          //     'BRAND', 'OTHER'
+          //   ]
+          // },
           {
             id: 'launching-text',
             title: 'Launching Text',

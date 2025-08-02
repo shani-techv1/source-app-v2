@@ -316,7 +316,7 @@ export default function SignupModal({ isOpen, onClose }: SignupModalProps) {
           >
             {/* Header */}
             <div className="flex-shrink-0 bg-white rounded-t-2xl z-50 relative">
-              <div className="flex items-center justify-between absolute w-full -top-8 left-1/2 -translate-x-1/2">
+              <div className="flex items-center justify-between absolute w-[120%] -top-10 left-1/2 -translate-x-1/2">
               {step !== "userType" && (
                     <button 
                       onClick={goBack}
