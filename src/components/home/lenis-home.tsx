@@ -115,7 +115,8 @@ export default function Home() {
     brandName,
     howItWorksItems,
     companyItems,
-    isLoading: contentLoading
+    isLoading: contentLoading,
+    modalTitle
   } = useContentManager();
 
   const handleShare = async (platform: string) => {
@@ -404,7 +405,7 @@ export default function Home() {
       </div>
       
       {/* Signup Modal */}
-      <SignupModal isOpen={modalOpen} onClose={() => setModalOpen(false)} />
+      <SignupModal isOpen={modalOpen} onClose={() => setModalOpen(false)} modalTitle={modalTitle}/>
       
     </ReactLenis>
   );

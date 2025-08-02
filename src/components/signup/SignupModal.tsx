@@ -17,6 +17,7 @@ type FormData = Record<string, string | string[] | File[] | null>;
 interface SignupModalProps {
   isOpen: boolean;
   onClose: () => void;
+  modalTitle? : string;
 }
 
 const basicDetailsFirstFields: FormField[] = [
@@ -141,7 +142,7 @@ const modalVariants = {
   }
 };
 
-export default function SignupModal({ isOpen, onClose }: SignupModalProps) {
+export default function SignupModal({ isOpen, onClose, modalTitle = "Join As" }: SignupModalProps) {
   const [step, setStep] = useState<"userType" | "basicDetails" | "roleSelection" | "success">("userType");
   const [userType, setUserType] = useState<"agent" | "client" | "talent" | null>(null);
   const [basicDetails, setBasicDetails] = useState<FormData>({});
@@ -335,7 +336,7 @@ export default function SignupModal({ isOpen, onClose }: SignupModalProps) {
                   </button>
               </div>
               {
-                step === "userType" && (<h1 className="text-3xl font-bold text-center">Join As</h1>)
+                step === "userType" && (<h1 className="text-3xl font-bold text-center">{modalTitle || "Join As"}</h1>)
               }
               {
                 ["basicDetails", "roleSelection", "success"].includes(step) && (<h1 className="text-3xl font-bold text-center bg-white ">Create an account</h1>)
