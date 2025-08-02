@@ -14,14 +14,14 @@ const images = [
 
 export default function ImageCollage() {
   return (
-    <div className="relative w-full max-w-4xl h-[700px] mx-auto">
+    <div className="relative w-full max-w-4xl h-[400px] mx-auto">
       {/* Center reference point */}
       <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-30">
         <Image
           src={images[0]}
           alt="Main"
-          width={400}
-          height={500}
+          width={300}
+          height={400}
           className="object-cover shadow-lg"
         />
       </div>
@@ -42,8 +42,8 @@ function ImageLayer({ src, className }: { src: string; className?: string }) {
       <Image
         src={src}
         alt="Gallery Image"
-        width={224}
-        height={288}
+        width={180}
+        height={220}
         className="object-cover shadow-md"
       />
     </div>

@@ -8,6 +8,10 @@ import SharedHeader from '@/components/header/SharedHeader';
 import { Footer } from '@/components/footer';
 import Contact from '@/components/pages/contact';
 import HowItWorks from '@/components/pages/how-it-works';
+import { Dialog } from '@/components/ui/dialog';
+import Home from '@/components/home/lenis-home';
+import LiquidGlassModal from '@/components/home/about-modal';
+import { useRouter } from 'next/navigation';
 
 interface PageData {
   slug: string;
@@ -21,6 +25,12 @@ export default function DynamicPage() {
   const { sitePages, isLoading } = useContentManager();
   const [pageData, setPageData] = useState<PageData | null>(null);
   const [notFound, setNotFound] = useState(false);
+
+  const router = useRouter();
+
+  const handleCloseModal = () => {
+  router.push('/'); // instead of window.history.pushState
+  };
 
   useEffect(() => {
     if (!isLoading && sitePages) {
@@ -51,27 +61,7 @@ export default function DynamicPage() {
     );
   }
 
-  if (notFound) {
-    return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50">
-        <SharedHeader isTransparent={false} />
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-center"
-        >
-          <h1 className="text-6xl font-bold text-gray-900 mb-4">404</h1>
-          <p className="text-xl text-gray-600 mb-8">Page not found</p>
-          <a
-            href="/"
-            className="inline-flex items-center px-6 py-3 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors"
-          >
-            Go Home
-          </a>
-        </motion.div>
-      </div>
-    );
-  }
+
 
   // Check for custom page components first
   if (slug === 'contact') {
@@ -84,6 +74,28 @@ export default function DynamicPage() {
         <Footer />
       </div>
     );
+  }
+
+  if (slug === 'about') {
+    return (
+      <>
+      <div className="max-h-screen overflow-hidden relative">
+        <Home />
+      </div>
+      <LiquidGlassModal
+        onClose={handleCloseModal}
+        title=""
+      >
+        <p className="text-gray-700 text-2xl">We’re a community-driven platform for creative professionals to connect, stay
+organized, and bring projects to life.
+Whether you're in fashion, film, or seeking creative services, our tools make it easy
+to manage your work in one place — with chat, invoicing, payments, stats, and
+more.
+Built for collaboration, discovery, and creativity — this is your space to connect,
+create, and grow.</p>
+      </LiquidGlassModal>
+    </>
+    )
   }
 
   if (slug === 'how-it-works') {
@@ -102,13 +114,35 @@ export default function DynamicPage() {
     return null;
   }
 
+  else if (notFound)  {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50">
+        <SharedHeader isTransparent={true} />
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center"
+        >
+          <h1 className="text-6xl font-bold text-gray-900 mb-4">404</h1>
+          <p className="text-xl text-gray-600 mb-8">Page not found</p>
+          <a
+            href="/"
+            className="inline-flex items-center px-6 py-3 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors"
+          >
+            Go Home
+          </a>
+        </motion.div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-white">
       {/* Consistent Header */}
-      <SharedHeader isTransparent={false} />
+      <SharedHeader isTransparent={true} />
 
       {/* Main Content */}
-      <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 pt-32">
+      <main className="mx-auto px-4 sm:px-6 lg:px-16 py-12 pt-[6%]">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

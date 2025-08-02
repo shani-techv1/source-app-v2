@@ -3,12 +3,15 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Save, Upload, Eye, EyeOff, Settings, Home, Users, FileText, Lock, Unlock, Plus, Trash2, Code, ExternalLink } from 'lucide-react';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Label } from '@/components/ui/label';
+import Link from 'next/link';
 
 // Types for content management
 interface ContentSection {
   id: string;
   title: string;
-  type: 'text' | 'textarea' | 'image' | 'array' | 'accordion' | 'pages' | 'footerLinks' | 'navMenu';
+  type: 'text' | 'textarea' | 'image' | 'array' | 'accordion' | 'pages' | 'footerLinks' | 'navMenu' | 'checkbox';
   value: string | string[];
   placeholder?: string;
   maxLength?: number;
@@ -271,7 +274,13 @@ export default function AdminDashboard() {
             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent"
           />
         );
-      
+      case 'checkbox':
+        return (
+          <div>
+            <Checkbox id={`checkbox-${sectionKey}`}></Checkbox>
+          <Label htmlFor={`checkbox-${sectionKey}`}>{section.placeholder}</Label>
+          </div>
+        ) //checbox case unimplemented yet
       case 'textarea':
         return (
           <div>
@@ -729,12 +738,13 @@ export default function AdminDashboard() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-4">
-              <h1 className="text-xl font-bold text-gray-900">Content Management Dashboard</h1>
-              {hasChanges && (
+              <h1 className="text-xl font-bold text-gray-900">Sourced Dashboard</h1>
+                {hasChanges && (
                 <span className="px-2 py-1 bg-yellow-100 text-yellow-800 text-xs rounded-full">
                   Unsaved Changes
                 </span>
               )}
+              
             </div>
             <div className="flex items-center space-x-4">
               <button
@@ -759,6 +769,10 @@ export default function AdminDashboard() {
                 <Unlock className="h-4 w-4 mr-2" />
                 Logout
               </button>
+              <Link href="/" className="text-gray-600 hover:text-gray-900 transition-colors inline-flex flex-row items-center rounded-lg bg-gray-100 p-2">
+                <Home className="h-4 w-4" />
+                <span className="sr-only">Go to Home</span>
+              </Link>
             </div>
           </div>
         </div>

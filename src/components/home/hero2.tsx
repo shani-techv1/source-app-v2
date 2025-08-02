@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useContentManager } from '@/hooks/useContentManager';
 import SignupFlow from '../signup/SignupFlow';
@@ -14,6 +14,8 @@ const Hero2 = ({ onModalOpenChange }: Hero2Props) => {
   const hero2Title = heroTitle;
   const hero2Subtitle = heroSubtitle;
 
+  const [imgLoaded, setImgLoaded] = useState(false);
+
   console.log(hero2Subtitle, hero2Title, heroImage);
 
   // Don't show loading state to prevent hydration mismatch
@@ -21,14 +23,23 @@ const Hero2 = ({ onModalOpenChange }: Hero2Props) => {
 
   return (
     <section className="relative w-full h-screen overflow-hidden">
+      {/* Skeleton Loader */}
+      {!imgLoaded && (
+        <div
+          className="absolute inset-0 w-full h-full bg-primary animate-pulse z-10"
+          aria-label="Loading image"
+        />
+      )}
       {/* Hero Image */}
       <img
-        src={heroImage || "/image.png"}
+        src={heroImage}
         alt="Creative professional"
-        className="w-full h-full object-cover object-center"
+        className={`w-full h-full object-cover object-center transition-opacity duration-500 ${imgLoaded ? 'opacity-100' : 'opacity-0'}`}
+        onLoad={() => setImgLoaded(true)}
+        style={{ position: 'absolute', inset: 0 }}
       />
 
-      <div className="absolute left-0 right-0 bottom-0 bg-white p-2 lg:p-16">
+      <div className="absolute left-0 right-0 bottom-0 bg-white p-2 lg:p-16 z-20">
         <div className="flex flex-col md:flex-row justify-between items-center w-full">
           <div className='space-y-0  '>
             <motion.h1

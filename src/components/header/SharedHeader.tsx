@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useContentManager } from '@/hooks/useContentManager';
 import { ChevronDown, Menu, X } from "lucide-react";
@@ -21,6 +21,7 @@ export default function SharedHeader({
   const [showHowItWorksDropdown, setShowHowItWorksDropdown] = useState(false);
   const [showCompanyDropdown, setShowCompanyDropdown] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
+  const [logoAspectRatio, setLogoAspectRatio] = useState<'square' | 'wide' | 'tall' | null>(null);
   
   const {
     brandName,
@@ -30,13 +31,36 @@ export default function SharedHeader({
     isLoading: contentLoading
   } = useContentManager();
 
-  if (contentLoading) {
-    return <div className="w-full h-20"></div>; // Placeholder
-  }
+  // Detect logo aspect ratio when it loads
+  useEffect(() => {
+    if (brandLogo) {
+      const img = new Image();
+      img.onload = () => {
+        const ratio = img.width / img.height;
+        if (ratio > 1.2) {
+          setLogoAspectRatio('wide');
+        } else if (ratio < 0.8) {
+          setLogoAspectRatio('tall');
+        } else {
+          setLogoAspectRatio('square');
+        }
+      };
+      img.src = brandLogo;
+    }
+  }, [brandLogo]);
 
-  const openChat = () => {
-    if (onChatOpen) {
-      onChatOpen();
+  // Dynamic logo classes based on aspect ratio
+  const getLogoClasses = () => {
+    const baseClasses = "object-contain rounded-lg";
+    
+    switch (logoAspectRatio) {
+      case 'wide':
+        return `h-8 w-auto max-w-32 md:h-10 md:max-w-40 ${baseClasses}`;
+      case 'tall':
+        return `h-12 w-auto max-w-16 md:h-14 md:max-w-20 ${baseClasses}`;
+      case 'square':
+      default:
+        return `h-10 w-10 md:h-12 md:w-12 ${baseClasses}`;
     }
   };
 
@@ -44,6 +68,39 @@ export default function SharedHeader({
   const headerClasses = isTransparent 
     ? "w-full absolute top-0 z-50" 
     : "w-full bg-white shadow-sm border-b relative z-50";
+
+  if (contentLoading) {
+    return (
+      <div className={`${headerClasses} ${className} animate-pulse`}>
+        <div className="max-w-[95%] mx-auto px-6 py-6 flex items-center justify-between">
+          {/* Logo Skeleton */}
+          <div className="flex items-center space-x-3">
+            <div className="h-12 w-12 md:h-10 md:w-10 bg-gray-200 rounded-lg" />
+            <div className="h-8 w-32 bg-gray-200 rounded" />
+          </div>
+          {/* Desktop Nav Skeleton */}
+          <div className="hidden md:flex items-center space-x-6">
+            <div className="flex items-center px-2 bg-white/70 backdrop-blur-sm py-1 rounded-sm">
+              <div className="h-8 w-28 bg-gray-200 rounded-full mx-2" />
+              <div className="h-8 w-24 bg-gray-200 rounded-full mx-2" />
+            </div>
+            <div className="h-10 w-10 bg-gray-200 rounded-full" />
+          </div>
+          {/* Mobile Nav Skeleton */}
+          <div className="md:hidden flex items-center space-x-2">
+            <div className="h-10 w-10 bg-gray-200 rounded-full" />
+            <div className="h-10 w-10 bg-gray-200 rounded-full" />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const openChat = () => {
+    if (onChatOpen) {
+      onChatOpen();
+    }
+  };
 
   return (
     <>
@@ -53,11 +110,11 @@ export default function SharedHeader({
           <div className="flex items-center">
             <Link href="/" className="flex items-center space-x-3">
               {brandLogo && (
-                <div className="flex-shrink-0">
+                <div className="flex-shrink-0 flex items-center justify-center">
                   <img
                     src={brandLogo}
                     alt={brandName}
-                    className="h-8 w-8 md:h-10 md:w-10 object-cover rounded-lg border border-gray-200 shadow-sm"
+                    className={getLogoClasses()}
                   />
                 </div>
               )}
@@ -283,4 +340,4 @@ export default function SharedHeader({
       )}
     </>
   );
-} 
+}

@@ -38,7 +38,7 @@ export async function GET() {
             id: 'hero-image',
             title: 'Hero Background Image',
             type: 'image',
-            value: '/image.png',
+            value: '',
             placeholder: 'Upload hero image'
           },
           {
