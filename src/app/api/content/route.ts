@@ -151,6 +151,13 @@ export async function GET() {
             placeholder: 'Upload favicon (16x16 or 32x32 pixels, .ico or .png format)'
           },
           {
+            id : 'modal-title',
+            title: 'Join as',
+            type: 'text',
+            value: 'Join as User',
+            placeholder: 'Enter modal title'
+          },
+          {
             id: 'google-font',
             title: 'Google Font',
             type: 'text',
