@@ -41,19 +41,19 @@ export async function GET() {
             value: '',
             placeholder: 'Upload hero image'
           },
-          {
-            id: 'morphing-texts',
-            title: 'Morphing Text Options',
-            type: 'array',
-            value: [
-              'MODEL', 'INFLUENCER', 'ACTOR', 'STYLIST', 'HAIR STYLIST', 
-              'MAKEUP ARTIST', 'PHOTOGRAPHER', 'VIDEOGRAPHER', 'ASSISTANT', 'LIGHTING', 
-              'DIRECTOR', 'COSTUME DESIGNER', 'PRODUCER', 'SOUND ENGINEER', 'POST PRODUCTION', 
-              'WRITER', 'FIT MODEL', 'TALENT AGENT', 'SET DESIGNER', 'GRAPHIC DESIGNER', 
-              'VEHICLE OWNER', 'EQUIPTMENT', 'PROPS', 'LOCATION (STUDIOS, HOUSES & OTHER)', 
-              'BRAND', 'OTHER'
-            ]
-          },
+          // {
+          //   id: 'morphing-texts',
+          //   title: 'Morphing Text Options',
+          //   type: 'array',
+          //   value: [
+          //     'MODEL', 'INFLUENCER', 'ACTOR', 'STYLIST', 'HAIR STYLIST', 
+          //     'MAKEUP ARTIST', 'PHOTOGRAPHER', 'VIDEOGRAPHER', 'ASSISTANT', 'LIGHTING', 
+          //     'DIRECTOR', 'COSTUME DESIGNER', 'PRODUCER', 'SOUND ENGINEER', 'POST PRODUCTION', 
+          //     'WRITER', 'FIT MODEL', 'TALENT AGENT', 'SET DESIGNER', 'GRAPHIC DESIGNER', 
+          //     'VEHICLE OWNER', 'EQUIPTMENT', 'PROPS', 'LOCATION (STUDIOS, HOUSES & OTHER)', 
+          //     'BRAND', 'OTHER'
+          //   ]
+          // },
           {
             id: 'launching-text',
             title: 'Launching Text',
@@ -149,6 +149,13 @@ export async function GET() {
             type: 'image',
             value: '/favicon.ico',
             placeholder: 'Upload favicon (16x16 or 32x32 pixels, .ico or .png format)'
+          },
+          {
+            id : 'modal-title',
+            title: 'Join as',
+            type: 'text',
+            value: 'Join as User',
+            placeholder: 'Enter modal title'
           },
           {
             id: 'google-font',

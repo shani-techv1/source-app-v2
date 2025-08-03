@@ -124,7 +124,8 @@ export default function AdminDashboard() {
       ...prev,
       [sectionKey]: prev[sectionKey].map(item => {
         if (item.id === itemId && Array.isArray(item.value)) {
-          return { ...item, value: [...item.value, ''] };
+          let temp = { ...item, value: [...item.value, 'Acordion Item 3'] };
+          return { ...item, value: [...item.value, 'Acordion Item 3'] };
         }
         return item;
       })
@@ -262,7 +263,6 @@ export default function AdminDashboard() {
   ];
 
   const renderContentEditor = (section: ContentSection, sectionKey: keyof ContentData) => {
-    console.log("section", section, sectionKey);
     switch (section.type) {
       case 'text':
         return (
@@ -459,7 +459,7 @@ export default function AdminDashboard() {
                 addArrayItem(sectionKey, section.id);
                 const currentItems = section.value as string[];
                 const newItems = [...currentItems];
-                newItems[newItems.length - 1] = newPage;
+                newItems.push(newPage);
                 handleContentChange(sectionKey, section.id, newItems);
               }}
               className="w-full px-4 py-3 border-2 border-dashed border-gray-300 rounded-lg text-gray-600 hover:border-gray-400 hover:text-gray-700 transition-colors flex items-center justify-center gap-2"
@@ -616,7 +616,7 @@ export default function AdminDashboard() {
                 // Update the last item with the template
                 const currentItems = section.value as string[];
                 const newItems = [...currentItems];
-                newItems[newItems.length - 1] = newAccordion;
+                newItems.push(newAccordion);
                 handleContentChange(sectionKey, section.id, newItems);
               }}
               className="w-full px-4 py-3 border-2 border-dashed border-gray-300 rounded-lg text-gray-600 hover:border-gray-400 hover:text-gray-700 transition-colors flex items-center justify-center gap-2"
