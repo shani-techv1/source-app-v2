@@ -380,3 +380,10 @@ body[style*="position: fixed"] [role="dialog"] {
     @apply bg-background text-foreground;
   }
 }
+
+
+.form-close-button {
+  position: absolute;
+  right: -50px;
+  top: -14px;
+}

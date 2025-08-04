@@ -317,7 +317,7 @@ export default function SignupModal({ isOpen, onClose, modalTitle = "Join As" }:
           >
             {/* Header */}
             <div className="flex-shrink-0 bg-white rounded-t-2xl z-50 relative">
-              <div className="flex items-center justify-between absolute w-[120%] -top-10 left-1/2 -translate-x-1/2">
+              <div className="flex items-center justify-between absolute w-[100%] -top-10 left-1/2 -translate-x-1/2">
               {step !== "userType" && (
                     <button 
                       onClick={goBack}
@@ -329,7 +329,7 @@ export default function SignupModal({ isOpen, onClose, modalTitle = "Join As" }:
                   )}
                   <button 
                     onClick={handleClose}
-                    className="p-2 hover:bg-gray-100 rounded-full transition-colors ml-auto"
+                    className="p-2 hover:bg-gray-100 rounded-full transition-colors ml-auto form-close-button"
                     aria-label="Close modal"
                   >
                     <X className="h-5 w-5" />
