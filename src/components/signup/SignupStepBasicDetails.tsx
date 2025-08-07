@@ -23,12 +23,12 @@ export function SignupStepBasicDetails({
   };
 
   return (
-    <div className="w-full min-h-0">
+    <div className="min-h-0 md:flex justify-center">
       <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 place-items-stretch">
           {fields.map((field: FormField) => (
             <div key={field.name} className="flex flex-col">
-              <label className="block text-xs font-semibold mb-2 uppercase tracking-wide" htmlFor={field.name}>
+              <label className="block text-xs mb-2 uppercase tracking-wide" htmlFor={field.name}>
                 {field.label}
                 {field.isOptional && <span className="text-gray-400 ml-1">(Optional)</span>}
               </label>
@@ -50,7 +50,7 @@ export function SignupStepBasicDetails({
                   placeholder={field.placeholder}
                   value={basicDetails[field.name] as string || ""}
                   onChange={handleBasicDetailsInputChange}
-                  className="w-full rounded-lg border border-gray-300 px-4 py-3"
+                  className="w-[300px] rounded-lg border border-gray-300 px-4 py-3"
                 />
               )}
             </div>

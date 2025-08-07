@@ -71,9 +71,9 @@ export async function generateMetadata(): Promise<Metadata> {
         keywords: 'creative network, photographers, videographers, models, talent booking, creative professionals',
         authors: [{ name: 'Sourced' }],
         icons: {
-          icon: faviconStr,
-          shortcut: faviconStr,
-          apple: faviconStr,
+          icon: '/api/favicon',
+          shortcut: '/api/favicon',
+          apple: '/api/favicon',
         },
         openGraph: {
           title: titleStr,

@@ -317,29 +317,28 @@ export default function SignupModal({ isOpen, onClose, modalTitle = "Join As" }:
           >
             {/* Header */}
             <div className="flex-shrink-0 bg-white rounded-t-2xl z-50 relative">
-              <div className="flex items-center justify-between absolute w-[100%] -top-10 left-1/2 -translate-x-1/2">
+              <div className="flex items-center justify-between absolute w-[100%] -top-8 right-1">
               {step !== "userType" && (
                     <button 
                       onClick={goBack}
-                      className="flex items-center text-sm font-medium text-gray-600 hover:text-black transition-colors"
+                      className="px-2 absolute -top-[10px] -left-[48px]"
                     >
-                      <ArrowLeft className="mr-1 h-4 w-4" />
-                      Back to details
+                      <ArrowLeft className="h-5 w-5" />
                     </button>
                   )}
                   <button 
                     onClick={handleClose}
-                    className="p-2 hover:bg-gray-100 rounded-full transition-colors ml-auto form-close-button"
+                    className="p-1  form-close-button"
                     aria-label="Close modal"
                   >
                     <X className="h-5 w-5" />
                   </button>
               </div>
               {
-                step === "userType" && (<h1 className="text-3xl font-bold text-center">{modalTitle || "Join As"}</h1>)
+                step === "userType" && (<h1 className="text-3xl text-center">{modalTitle || "Join As"}</h1>)
               }
               {
-                ["basicDetails", "roleSelection", "success"].includes(step) && (<h1 className="text-3xl font-bold text-center bg-white ">Create an account</h1>)
+                ["basicDetails", "roleSelection", "success"].includes(step) && (<h1 className="text-3xl text-center bg-white ">Create an account</h1>)
               }
             </div>
             {/* Content */}
