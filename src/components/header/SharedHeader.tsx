@@ -12,9 +12,9 @@ interface SharedHeaderProps {
   isLoaded?: boolean;
 }
 
-export default function SharedHeader({ 
-  isTransparent = true, 
-  className = "", 
+export default function SharedHeader({
+  isTransparent = true,
+  className = "",
   onChatOpen,
   isLoaded = true
 }: SharedHeaderProps) {
@@ -22,7 +22,7 @@ export default function SharedHeader({
   const [showCompanyDropdown, setShowCompanyDropdown] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [logoAspectRatio, setLogoAspectRatio] = useState<'square' | 'wide' | 'tall' | null>(null);
-  
+
   const {
     brandName,
     brandLogo,
@@ -52,7 +52,7 @@ export default function SharedHeader({
   // Dynamic logo classes based on aspect ratio
   const getLogoClasses = () => {
     const baseClasses = "object-contain rounded-lg";
-    
+
     switch (logoAspectRatio) {
       case 'wide':
         return `h-8 w-auto max-w-32 md:h-10 md:max-w-40 ${baseClasses}`;
@@ -65,14 +65,14 @@ export default function SharedHeader({
   };
 
   // Use the same header design for all pages
-  const headerClasses = isTransparent 
-    ? "w-full absolute top-0 z-50" 
+  const headerClasses = isTransparent
+    ? "w-full absolute top-0 z-50"
     : "w-full bg-white shadow-sm border-b relative z-50";
 
   if (contentLoading) {
     return (
       <div className={`${headerClasses} ${className} animate-pulse`}>
-        <div className="max-w-[95%] mx-auto px-6 py-6 flex items-center justify-between">
+        <div className="max-w-[95%] mx-auto px-6 py-6 flex items-center justify-between" style={{ margin: 0, padding: '16px 24px', width: '100%', maxWidth: '100%' }}>
           {/* Logo Skeleton */}
           <div className="flex items-center space-x-3">
             <div className="h-12 w-12 md:h-10 md:w-10 bg-gray-200 rounded-lg" />
@@ -102,10 +102,14 @@ export default function SharedHeader({
     }
   };
 
+  // console.log('====================================');
+  // console.log(howItWorksMenuItems,'howItWorksMenuItems');
+  // console.log('====================================');
+
   return (
     <>
       <header className={`${headerClasses} ${className}`}>
-        <div className="max-w-[95%] mx-auto px-6 py-6 flex items-center justify-between">
+        <div className="max-w-[95%] mx-auto px-6 py-6 flex items-center justify-between" style={{ margin: 0, padding: '16px 24px', width: '100%', maxWidth: '100%' }} >
           {/* Left Logo/Brand Name */}
           <div className="flex items-center">
             <Link href="/" className="flex items-center space-x-3">
@@ -139,7 +143,7 @@ export default function SharedHeader({
                     HOW IT WORKS
                     <ChevronDown className="h-3 w-3" />
                   </button>
-            
+
                   {showHowItWorksDropdown && (
                     <div
                       className="absolute top-full left-0 mt-0 w-48 bg-white rounded-lg shadow-lg border py-2 z-50"
@@ -164,7 +168,7 @@ export default function SharedHeader({
                     COMPANY
                     <ChevronDown className="h-3 w-3" />
                   </button>
-            
+
                   {showCompanyDropdown && (
                     <div
                       className="absolute top-full left-0 mt-0 w-48 bg-white rounded-lg shadow-lg border py-2 z-50"
@@ -182,37 +186,38 @@ export default function SharedHeader({
                   )}
                 </div>
               </nav>
-            
+
               {/* Headphone Icon */}
             </div>
             <div className="">
-                <button
-                  className="px-2 py-2 mt-2 transition-colors"
-                  onClick={openChat}
-                  disabled={!isLoaded}
-                  aria-label="Support"
+              <button
+                className="px-2 py-2 mt-2 transition-colors"
+                style={{ paddingRight: 0 }}
+                onClick={openChat}
+                disabled={!isLoaded}
+                aria-label="Support"
+              >
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="text-black"
                 >
-                  <svg
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="text-black"
-                  >
-                    <path
-                      d="M12 1C7.03 1 3 5.03 3 10v4c0 1.1.9 2 2 2h2c1.1 0 2-.9 2-2v-2c0-1.1-.9-2-2-2H5c0-3.87 3.13-7 7-7s7 3.13 7 7h-2c-1.1 0-2 .9-2 2v2c0 1.1.9 2 2 2h2c1.1 0 2-.9 2-2v-4c0-4.97-4.03-9-9-9z"
-                      fill="currentColor"
-                    />
-                  </svg>
-                </button>
-              </div>
+                  <path
+                    d="M12 1C7.03 1 3 5.03 3 10v4c0 1.1.9 2 2 2h2c1.1 0 2-.9 2-2v-2c0-1.1-.9-2-2-2H5c0-3.87 3.13-7 7-7s7 3.13 7 7h-2c-1.1 0-2 .9-2 2v2c0 1.1.9 2 2 2h2c1.1 0 2-.9 2-2v-4c0-4.97-4.03-9-9-9z"
+                    fill="currentColor"
+                  />
+                </svg>
+              </button>
+            </div>
           </div>
 
           {/* Mobile Menu Button and Support */}
           <div className="md:hidden flex items-center space-x-2">
             {/* Support Icon for Mobile */}
-            <button 
+            <button
               className="p-2 hover:bg-white/20 rounded-full transition-colors bg-white/70 backdrop-blur-sm"
               onClick={openChat}
               disabled={!isLoaded}
@@ -232,7 +237,7 @@ export default function SharedHeader({
                 />
               </svg>
             </button>
-            
+
             {/* Mobile Menu Button */}
             <button
               onClick={() => setShowMobileMenu(!showMobileMenu)}
@@ -252,7 +257,7 @@ export default function SharedHeader({
       {/* Mobile Menu Overlay */}
       {showMobileMenu && (
         <div className="md:hidden fixed inset-0 z-50 bg-black bg-opacity-50" onClick={() => setShowMobileMenu(false)}>
-          <div 
+          <div
             className="fixed top-0 right-0 h-full w-80 bg-white shadow-xl transform transition-transform duration-300 ease-in-out overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
           >
