@@ -76,13 +76,13 @@ const LiquidGlassModal: React.FC<LiquidGlassModalProps> = ({
         }}
       >
         {/* Close button in top right */}
-        <button
+        {/* <button
           onClick={handleClose}
           className="absolute top-[8%] right-7 md:top-20 md:right-16 flex items-center justify-center w-12 h-12 group z-50"
           aria-label="Close"
         >
           <X className="w-6 h-6 text-black/80 transition-colors duration-200" />
-        </button>
+        </button> */}
 
         {/* Header */}
         <div className="relative flex items-center justify-between px-8 md:px-16 pt-20 pb-6">
