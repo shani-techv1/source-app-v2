@@ -100,14 +100,14 @@ export function Dropdown<T = string>({
       const menuHeight = Math.min(240, options.length * 60); // max 240px height
       const spaceBelow = viewportHeight - rect.bottom;
       const spaceAbove = rect.top;
-      
+
       // Determine if dropdown should open above or below
       const shouldOpenAbove = spaceBelow < menuHeight && spaceAbove > spaceBelow;
-      
+
       setMenuStyles({
         position: "absolute",
-        top: shouldOpenAbove 
-          ? rect.top + window.scrollY - menuHeight 
+        top: shouldOpenAbove
+          ? rect.top + window.scrollY - menuHeight
           : rect.bottom + window.scrollY,
         left: rect.left + window.scrollX,
         width: rect.width,
@@ -120,7 +120,7 @@ export function Dropdown<T = string>({
     if (multiselect) {
       const currentValues = Array.isArray(value) ? value : [];
       const isSelected = currentValues.includes(selectedValue);
-      
+
       if (isSelected) {
         // Remove from selection
         const newValues = currentValues.filter(v => v !== selectedValue);
@@ -172,58 +172,57 @@ export function Dropdown<T = string>({
   // The dropdown menu rendered in a portal
   const menu = open
     ? createPortal(
-        <div
-          style={{
-            ...menuStyles,
-            maxHeight: '240px',
-            overflowY: 'auto',
-            overflowX: 'hidden',
-            WebkitOverflowScrolling: 'touch'
-          }}
-          className="bg-white border border-gray-200 rounded-xl shadow-lg custom-scrollbar animate-fade-in"
-          onWheel={(e) => {
-            // Prevent the wheel event from bubbling up
-            e.stopPropagation();
-          }}
-        >
-          <div className="py-1">
-            {options.map((opt, i) => (
-              <div
-                key={String(opt.value)}
-                role="option"
-                aria-selected={isSelected(opt.value)}
-                tabIndex={-1}
-                className={`px-4 py-3 select-none text-xs flex items-center justify-between transition-colors ${
-                  opt.disabled 
-                    ? "opacity-60 cursor-not-allowed text-gray-600" 
-                    : "cursor-pointer hover:bg-gray-50"
+      <div
+        style={{
+          ...menuStyles,
+          maxHeight: '240px',
+          overflowY: 'auto',
+          overflowX: 'hidden',
+          WebkitOverflowScrolling: 'touch'
+        }}
+        className="bg-white border border-gray-200 rounded-xl shadow-lg custom-scrollbar animate-fade-in"
+        onWheel={(e) => {
+          // Prevent the wheel event from bubbling up
+          e.stopPropagation();
+        }}
+      >
+        <div className="py-1">
+          {options.map((opt, i) => (
+            <div
+              key={String(opt.value)}
+              role="option"
+              aria-selected={isSelected(opt.value)}
+              tabIndex={-1}
+              className={`px-4 py-3 select-none text-md flex items-center justify-between transition-colors ${opt.disabled
+                  ? "opacity-60 cursor-not-allowed text-gray-600"
+                  : "cursor-pointer hover:bg-gray-50"
                 } ${isSelected(opt.value) ? "bg-gray-100" : ""} ${highlighted === i && !opt.disabled ? "bg-gray-200" : ""}`}
-                onMouseEnter={() => !opt.disabled && setHighlighted(i)}
-                onMouseLeave={() => setHighlighted(-1)}
-                onMouseDown={(e) => {
-                  e.preventDefault();
-                  if (!opt.disabled) {
-                    handleOptionSelect(opt.value);
-                  }
-                }}
-              >
-                <span className="flex-1">{opt.label}</span>
-                {opt.disabled && (
-                  <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-200 text-gray-700 border border-gray-300">
-                    Coming soon
-                  </span>
-                )}
-                {multiselect && isSelected(opt.value) && (
-                  <div className="w-4 h-4 bg-black rounded-full flex items-center justify-center ml-2 flex-shrink-0">
-                    <div className="w-2 h-2 bg-white rounded-full"></div>
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>,
-        document.body
-      )
+              onMouseEnter={() => !opt.disabled && setHighlighted(i)}
+              onMouseLeave={() => setHighlighted(-1)}
+              onMouseDown={(e) => {
+                e.preventDefault();
+                if (!opt.disabled) {
+                  handleOptionSelect(opt.value);
+                }
+              }}
+            >
+              <span className="flex-1">{opt.label}</span>
+              {opt.disabled && (
+                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-200 text-gray-700 border border-gray-300">
+                  Coming soon
+                </span>
+              )}
+              {multiselect && isSelected(opt.value) && (
+                <div className="w-4 h-4 bg-black rounded-full flex items-center justify-center ml-2 flex-shrink-0">
+                  <div className="w-2 h-2 bg-white rounded-full"></div>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>,
+      document.body
+    )
     : null;
 
   return (
@@ -241,18 +240,18 @@ export function Dropdown<T = string>({
         >
           <div className="flex-1 min-w-0">
             {multiselect && Array.isArray(value) && value.length > 0 ? (
-                          <div className="flex overflow-auto gap-1">
-                             {value.slice(0, 2).map((selectedValue) => {
-                 const selected = options.find(opt => opt.value === selectedValue);
-                return (
-                  <SelectedChip
-                    key={String(selectedValue)}
-                    label={selected?.label || ''}
-                    value={selectedValue}
-                    onRemove={removeSelection}
-                  />
-                );
-              })}
+              <div className="flex overflow-auto gap-1">
+                {value.slice(0, 2).map((selectedValue) => {
+                  const selected = options.find(opt => opt.value === selectedValue);
+                  return (
+                    <SelectedChip
+                      key={String(selectedValue)}
+                      label={selected?.label || ''}
+                      value={selectedValue}
+                      onRemove={removeSelection}
+                    />
+                  );
+                })}
                 {value.length > 2 && (
                   <span className="text-gray-500 text-xs">+{value.length - 2} more</span>
                 )}
