@@ -102,7 +102,7 @@ export default function SignupAccount({
             />
           )
         }
-        <div className="flex justify-center pt-6">
+        <div className="flex justify-center pt-[6px]">
           <button 
             type="submit" 
             className="w-64 py-3 bg-black text-white text-xl font-bold rounded-lg uppercase tracking-wide hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"

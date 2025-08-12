@@ -1,21 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server';
-import dbConnect from '@/lib/mongodb';
-import Content from '@/lib/models/Content';
+import dbConnect from '@/hooks/lib/mongodb';
+import Content from '@/hooks/lib/models/Content';
 
 export async function GET() {
   try {
     await dbConnect();
-    
+
     // Fetch all content sections from database
     const contentSections = await Content.find({}).lean();
-    
+
     // Transform the data to match the expected format
     const content: Record<string, any[]> = {};
-    
+
     contentSections.forEach(section => {
       content[section.section] = section.items;
     });
-    
+
     // If no content exists, return default content
     if (Object.keys(content).length === 0) {
       const defaultContent = {
@@ -151,7 +151,7 @@ export async function GET() {
             placeholder: 'Upload favicon (16x16 or 32x32 pixels, .ico or .png format)'
           },
           {
-            id : 'modal-title',
+            id: 'modal-title',
             title: 'Join as',
             type: 'text',
             value: 'Join as User',
@@ -219,7 +219,7 @@ export async function GET() {
           }
         ]
       };
-      
+
       return NextResponse.json(defaultContent);
     }
 
@@ -237,7 +237,7 @@ export async function POST(request: NextRequest) {
   try {
     await dbConnect();
     const content = await request.json();
-    
+
     if (!content || typeof content !== 'object') {
       return NextResponse.json(
         { error: 'Invalid content structure' },
@@ -255,10 +255,11 @@ export async function POST(request: NextRequest) {
     });
 
     await Promise.all(savePromises);
+    console.log('Content updated successfully', savePromises);
 
-    return NextResponse.json({ 
-      success: true, 
-      message: 'Content updated successfully' 
+    return NextResponse.json({
+      success: true,
+      message: 'Content updated successfully'
     });
   } catch (error) {
     console.error('Error updating content:', error);
@@ -273,7 +274,7 @@ export async function PUT(request: NextRequest) {
   try {
     await dbConnect();
     const updates = await request.json();
-    
+
     // Handle partial updates
     const updatePromises = Object.entries(updates).map(async ([section, items]) => {
       await Content.findOneAndUpdate(
@@ -284,10 +285,10 @@ export async function PUT(request: NextRequest) {
     });
 
     await Promise.all(updatePromises);
-    
-    return NextResponse.json({ 
-      success: true, 
-      message: 'Content updated successfully' 
+
+    return NextResponse.json({
+      success: true,
+      message: 'Content updated successfully'
     });
   } catch (error) {
     console.error('Error updating content:', error);

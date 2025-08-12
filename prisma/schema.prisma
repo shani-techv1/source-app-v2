@@ -1,0 +1,68 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                     Int       @id @default(autoincrement())
+  email                  String?   @unique
+  firstName              String?
+  lastName               String?
+  phoneNumber            String?
+  address                String?
+  zipCode                String?
+  gender                 String?
+  dateOfBirth            DateTime?
+  accountPassword        String?
+  status                 StatusEnum @default(PENDING)
+  main_location          String?
+  instagram_account      String?
+  average_day_rate_currency String?
+  interests              String?
+  bio                    String?
+  clients                String?
+  user_type              UserTypeEnum @default(CLIENT)
+}
+
+enum StatusEnum {
+  ACTIVE
+  INACTIVE
+  PENDING
+}
+
+enum UserTypeEnum {
+  CLIENT
+  ADMIN
+}
+
+model RoleField {
+  id                 Int       @id @default(autoincrement())
+  role_id            Int
+  field_label        String
+  field_type         String
+  field_options      Json?     // Stores array of strings
+  field_placeholder  String?
+  is_multiple        Boolean   @default(false)
+  allowed_file_types String?
+  order              Int       @default(0)
+  deletedAt          DateTime? @db.Timestamp(6)
+}
+
+model Role {
+  id         Int      @id @default(autoincrement())
+  name       String   @unique
+  createdAt  DateTime @default(now())
+  createdBy  String?
+  updatedAt  DateTime @updatedAt
+  updatedBy  String?
+}

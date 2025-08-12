@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState, Suspense, useRef } from "react";
 import { FormField, CreativeRole } from "./SignupFlow";
-import { cn } from "@/lib/utils";
+import { cn } from "@/hooks/lib/utils";
 import { getRoleFieldsById } from "@/app/actions/submit-form";
 
 interface SignupStepQuestionsProps {
