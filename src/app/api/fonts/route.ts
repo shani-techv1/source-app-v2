@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
-import dbConnect from '@/lib/mongodb';
-import Content from '@/lib/models/Content';
+import dbConnect from '@/hooks/lib/mongodb';
+import Content from '@/hooks/lib/models/Content';
 
 // Type for the database response
 interface ContentSection {

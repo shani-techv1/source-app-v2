@@ -144,7 +144,7 @@ export default function Home() {
   // Modified Lenis scroll tracking to pause scrolling when modal is open
   const lenis = useLenis(({ scroll }) => {
     if (!modalOpen) {
-      console.log("Scroll position:", scroll);
+      // console.log("Scroll position:", scroll);
     }
   });
 

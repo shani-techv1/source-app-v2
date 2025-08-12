@@ -22,10 +22,9 @@ export function SignupStepUserType({ userType, setUserType, onContinue }: Signup
           value={userType}
           onChange={val => setUserType(val as "agent" | "client" | "talent")}
           placeholder="I’m a..."
-          // className="mb-6"
         />
         <button
-          className="w-full py-3 px-8 bg-black text-white uppercase font-semibold tracking-wide rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full md:w-[184px] py-3 px-8 bg-black text-white uppercase font-semibold tracking-wide rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
           disabled={!userType || userType === "client"}
           onClick={onContinue}
         >
