@@ -1,6 +1,6 @@
 import React from "react";
 import { X, Check } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn } from "@/hooks/lib/utils";
 import { CreativeRole } from "./SignupFlow";
 
 interface SignupStepRoleSelectionProps {

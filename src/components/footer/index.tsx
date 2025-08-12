@@ -36,14 +36,14 @@ const logoVariants: Variants = {
 
 // Letter animation for staggered reveal
 const letterVariants: Variants = {
-  hidden: { 
+  hidden: {
     opacity: 0,
     y: 20
   },
   visible: (custom) => ({
     opacity: 1,
     y: 0,
-    transition: { 
+    transition: {
       duration: 0.5,
       delay: custom * 0.05, // Staggered delay based on letter index
       ease: [0.22, 1, 0.36, 1],
@@ -94,30 +94,30 @@ export const Footer: FC = () => {
 
   return (
     <footer className="w-full bg-white mt-16 py-12 md:py-16 border-gray-400">  {/* removed border-t class untill footer has been asked to reinstate  */}
-      
-      {/* <div className="max-w-screen-2xl px-6 md:px-16 mx-auto flex flex-col md:flex-row justify-between gap-12"> */}
-        {/* LEFT: Subscription Box */}
-        {/* <div className="flex-1 p-8 rounded-3xl bg-gray-100 flex flex-col items-start justify-center"> */}
-          {/* <h3 className="text-xl font-bold">{subscriptionTitle}</h3> */}
-          {/* <p className="text-base mt-2 mb-6 text-black/80">{subscriptionSubtitle}</p> */}
 
-          {/* Email + Subscribe */}
-          {/* <div className="flex flex-col sm:flex-row gap-4 w-full"> */}
-            {/* <input
+      {/* <div className="max-w-screen-2xl px-6 md:px-16 mx-auto flex flex-col md:flex-row justify-between gap-12"> */}
+      {/* LEFT: Subscription Box */}
+      {/* <div className="flex-1 p-8 rounded-3xl bg-gray-100 flex flex-col items-start justify-center"> */}
+      {/* <h3 className="text-xl font-bold">{subscriptionTitle}</h3> */}
+      {/* <p className="text-base mt-2 mb-6 text-black/80">{subscriptionSubtitle}</p> */}
+
+      {/* Email + Subscribe */}
+      {/* <div className="flex flex-col sm:flex-row gap-4 w-full"> */}
+      {/* <input
               type="email"
               placeholder="Enter your email"
               className="rounded-full border border-black px-6 py-3 text-base flex-1 placeholder-gray-400 focus:outline-none"
             /> */}
-            {/* <button className="bg-black text-white px-8 py-3 rounded-full text-base font-semibold tracking-widest flex items-center justify-center gap-2">
+      {/* <button className="bg-black text-white px-8 py-3 rounded-full text-base font-semibold tracking-widest flex items-center justify-center gap-2">
               SUBSCRIBE
               <PlusCircle width={18} height={18} />
             </button> */}
-          {/* </div> */}
-        {/* </div> */}
+      {/* </div> */}
+      {/* </div> */}
 
-        {/* RIGHT: Dynamic Navigation Columns */}
-        {/* <div className="flex-[1.2] flex flex-wrap md:flex-nowrap gap-12 uppercase"> */}
-          {/* {parsedColumns.map((column, index) => (
+      {/* RIGHT: Dynamic Navigation Columns */}
+      {/* <div className="flex-[1.2] flex flex-wrap md:flex-nowrap gap-12 uppercase"> */}
+      {/* {parsedColumns.map((column, index) => (
             <div key={index} className="min-w-[140px]">
               <h4 className="font-semibold text-gray-500 uppercase text-sm mb-4">
                 {column.title}
@@ -137,14 +137,14 @@ export const Footer: FC = () => {
             </div>
           ))} */}
 
-          {/* SOCIAL MEDIA COLUMN */}
-          {/* <div className="min-w-[140px]"> */}
-            {/* <h4 className="font-semibold text-gray-500 uppercase text-sm mb-4">
+      {/* SOCIAL MEDIA COLUMN */}
+      {/* <div className="min-w-[140px]"> */}
+      {/* <h4 className="font-semibold text-gray-500 uppercase text-sm mb-4">
               Social Media
             </h4> */}
-            {/* <ul className="space-y-3 text-base text-black"> */}
-              {/* Instagram */}
-              {/* <li className="group relative inline-flex items-center">
+      {/* <ul className="space-y-3 text-base text-black"> */}
+      {/* Instagram */}
+      {/* <li className="group relative inline-flex items-center">
                 <a href="#" className="hover:font-medium flex items-center">
                   Instagram
                   <ArrowUpRight
@@ -156,8 +156,8 @@ export const Footer: FC = () => {
                 </a>
               </li> */}
 
-              {/* LinkedIn */}
-              {/* <li className="group relative inline-flex items-center">
+      {/* LinkedIn */}
+      {/* <li className="group relative inline-flex items-center">
                 <a href="#" className="hover:font-medium flex items-center">
                   LinkedIn
                   <ArrowUpRight
@@ -168,14 +168,14 @@ export const Footer: FC = () => {
                   />
                 </a>
               </li> */}
-            {/* </ul> */}
-          {/* </div> */}
-        {/* </div> */}
+      {/* </ul> */}
+      {/* </div> */}
+      {/* </div> */}
       {/* </div> */}
 
       {/* Divider */}
       {/* <div className="h-px bg-gray-200 my-16"></div> */}
-      
+
       {/* Large Brand Logo with Animation */}
       {/* <motion.div 
         ref={ref}
@@ -201,7 +201,7 @@ export const Footer: FC = () => {
           ))}
         </h1>
       </motion.div> */}
-      
+
       {/* Copyright and Legal Links */}
       <div className="mx-auto flex flex-col sm:flex-row justify-between items-start sm:items-center text-base text-gray-500
       border-t border-black
@@ -212,25 +212,25 @@ export const Footer: FC = () => {
           <a href="/privacy" className="hover:text-black transition-colors">Privacy Policy</a>
         </div>
         <div className="flex space-x-4">
-      <a href="#" aria-label="Instagram" className="hover:opacity-75">
-        <img src={instagramIcon} alt="Instagram" className="h-6 w-6" />
-      </a>
-      <a href="#" aria-label="LinkedIn" className="hover:opacity-75">
-        <img src={linkedinIcon} alt="LinkedIn" className="h-6 w-6" />
-      </a>
-    </div>
+          <a href="#" aria-label="Instagram" className="opacity-65 hover:opacity-100">
+            <img src={instagramIcon} alt="Instagram" className="h-6 w-6 " />
+          </a>
+          <a href="#" aria-label="LinkedIn" className="opacity-55 hover:opacity-100">
+            <img src={linkedinIcon} alt="LinkedIn" className="h-6 w-6" />
+          </a>
+        </div>
       </div>
 
-     {/* Tawk.to script */}
+      {/* Tawk.to script */}
       <Script
         strategy="afterInteractive"
         src="https://embed.tawk.to/67cbecbd2c2717190f9e743f/1ilq99hcs"
-         onLoad={() => {
+        onLoad={() => {
           if (!window.Tawk_API) {
             window.Tawk_API = {
-              showWidget: () => {},
-              maximize: () => {},
-              hideWidget: () => {}
+              showWidget: () => { },
+              maximize: () => { },
+              hideWidget: () => { }
             };
           }
           window.Tawk_LoadStart = new Date();

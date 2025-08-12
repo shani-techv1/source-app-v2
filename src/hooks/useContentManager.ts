@@ -156,7 +156,7 @@ const defaultContent: ContentData = {
       placeholder: 'Upload favicon (16x16 or 32x32 pixels, .ico or .png format)'
     },
     {
-      id : 'modal-title',
+      id: 'modal-title',
       title: 'Join as',
       type: 'text',
       value: 'Join as User',
@@ -230,7 +230,7 @@ export const useContentManager = () => {
         const savedContent = await fetch('/api/content');
         if (savedContent.ok) {
           const parsedContent = await savedContent.json();
-          console.log("parsedContent:",parsedContent);
+          // console.log("parsedContent:", parsedContent);
           // Merge with default content to ensure all sections exist
           const mergedContent = {
             ...defaultContent,
@@ -282,8 +282,12 @@ export const useContentManager = () => {
   };
 
   // Helper function to get image URL
-  const getImage = (section: keyof ContentData, id: string): string => {
+  const getImage = (section: keyof ContentData, id: string): string[] | string => {
     const value = getContent(section, id);
+    if (id == 'hero-image') {
+      console.log('getImage value:', value);
+      return Array.isArray(value) ? value : value;
+    }
     return Array.isArray(value) ? value[0] || '' : value;
   };
 
@@ -292,9 +296,9 @@ export const useContentManager = () => {
     const items = getArray(section, id);
     return items.map(item => {
       const [label, url] = item.split('|');
-      return { 
-        label: label || '', 
-        url: url || '#' 
+      return {
+        label: label || '',
+        url: url || '#'
       };
     });
   };
@@ -335,7 +339,7 @@ export const useContentManager = () => {
     instagramIcon: getImage('footer', 'instagram-icon'),
     linkedinIcon: getImage('footer', 'linkedin-icon'),
     siteTitle: getText('general', 'site-title'),
-    modalTitle: getText('general','modal-title'),
+    modalTitle: getText('general', 'modal-title'),
     metaDescription: getText('general', 'meta-description'),
     siteFavicon: getImage('general', 'site-favicon'),
     // Why Sourced section getters
