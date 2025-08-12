@@ -3,7 +3,7 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   /* config options here */
   experimental: {
-    serverComponentsExternalPackages: ['@types/node'],
+    serverComponentsExternalPackages: [], // Remove @types/node
   },
   images: {
     dangerouslyAllowSVG: true,
@@ -12,48 +12,46 @@ const nextConfig: NextConfig = {
       {
         protocol: 'https',
         hostname: 'picsum.photos',
-        pathname: '/**'
+        pathname: '/',
       },
       {
         protocol: 'https',
         hostname: 'cdn.shopify.com',
-        pathname: '/s/files/**'
+        pathname: '/s/files/',
       },
       {
         protocol: 'https',
         hostname: 'images.unsplash.com',
-        pathname: '/**'
+        pathname: '/',
       },
       {
         protocol: 'https',
         hostname: 'videos.unsplash.com',
-        pathname: '/**'
+        pathname: '/',
       },
       {
         protocol: 'https',
         hostname: 'xcbbarwznolppjnnyxpf.supabase.co',
-        pathname: '/**'
+        pathname: '/',
       },
       {
         protocol: 'https',
         hostname: 'plus.unsplash.com',
-        pathname: '/**'
+        pathname: '/',
       },
       {
         protocol: 'https',
         hostname: 'github.com',
-        pathname: '/**'
+        pathname: '/',
       },
       {
         protocol: 'https',
         hostname: 'images.pexels.com',
-        pathname: '/**'
-      }
-    ]
+        pathname: '/',
+      },
+    ],
   },
   eslint: {
-    // Warning: This allows production builds to successfully complete even if
-    // your project has ESLint errors.
     ignoreDuringBuilds: true,
   },
 };

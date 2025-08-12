@@ -62,10 +62,6 @@ export default function HowItWorks() {
     }
   }, [params]);
 
-
-
-  
-
   useEffect(() => {
     const handleScroll = () => {
       setShowArrow(window.scrollY < 10);
@@ -85,11 +81,10 @@ export default function HowItWorks() {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`px-6 py-3 rounded-full text-sm font-medium transition-colors ${
-                activeTab === tab.id
-                  ? 'bg-black text-white'
-                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-              }`}
+              className={`px-6 py-3 rounded-full text-sm font-medium transition-colors ${activeTab === tab.id
+                ? 'bg-black text-white'
+                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                }`}
             >
               {tab.label}
             </button>
@@ -101,7 +96,7 @@ export default function HowItWorks() {
       {activeTab === 'pricing' && (
         <>
           {/* Main Content Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 px-8 h-[80vh]">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 px-8 h-[80vh] md:pt-[80px]">
             {/* Left Column - Main Title */}
             <div className="lg:pr-8">
               <h1 className="text-6xl lg:text-7xl font-light text-black leading-tight">
@@ -113,7 +108,7 @@ export default function HowItWorks() {
             <div className="space-y-16">
               {/* Main Content */}
               <div>
-                <p className="text-lg text-gray-900 leading-relaxed">
+                <p className="text-lg text-gray-900 leading-relaxed md:relative md:top-[24px]">
                   {activeTabData?.content}
                 </p>
               </div>
@@ -128,17 +123,17 @@ export default function HowItWorks() {
                 {activeTabData?.additionalContent}
               </p>
               <div className="flex justify-center animate-bounce">
-                <svg 
-                  className="w-6 h-6 text-gray-700" 
-                  fill="none" 
-                  stroke="currentColor" 
+                <svg
+                  className="w-6 h-6 text-gray-700"
+                  fill="none"
+                  stroke="currentColor"
                   viewBox="0 0 24 24"
                 >
-                  <path 
-                    strokeLinecap="round" 
-                    strokeLinejoin="round" 
-                    strokeWidth={2} 
-                    d="M19 14l-7 7m0 0l-7-7m7 7V3" 
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 14l-7 7m0 0l-7-7m7 7V3"
                   />
                 </svg>
               </div>
@@ -171,52 +166,52 @@ export default function HowItWorks() {
                     {/* Main central image */}
                     <div className="col-span-2 row-span-2 relative">
                       <div className="pt-8">
-                      <ImageCollage />
+                        <ImageCollage />
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-                          <div className="px-8 mt-16">
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                {/* Quick and Simple */}
-                <div className="text-center">
-                  <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <span className="text-gray-500 text-sm">(big icon)</span>
-                  </div>
-                  <h3 className="text-xl font-medium mb-2">Quick and Simple</h3>
-                  <p className="text-gray-600">Browse and book in minutes not days.</p>
-                </div>
+              <div className="px-8 mt-16">
 
-                {/* Make Boards */}
-                <div className="text-center">
-                  <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <span className="text-gray-500 text-sm">(big icon)</span>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                  {/* Quick and Simple */}
+                  <div className="text-center">
+                    <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <span className="text-gray-500 text-sm">(big icon)</span>
+                    </div>
+                    <h3 className="text-xl font-medium mb-2">Quick and Simple</h3>
+                    <p className="text-gray-600">Browse and book in minutes not days.</p>
                   </div>
-                  <h3 className="text-xl font-medium mb-2">Make Boards</h3>
-                  <p className="text-gray-600">Save vendors for future projects. Create organized boards to manage.</p>
-                </div>
 
-                {/* Payment History */}
-                <div className="text-center">
-                  <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <span className="text-gray-500 text-sm">(big icon)</span>
+                  {/* Make Boards */}
+                  <div className="text-center">
+                    <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <span className="text-gray-500 text-sm">(big icon)</span>
+                    </div>
+                    <h3 className="text-xl font-medium mb-2">Make Boards</h3>
+                    <p className="text-gray-600">Save vendors for future projects. Create organized boards to manage.</p>
                   </div>
-                  <h3 className="text-xl font-medium mb-2">Payment History</h3>
-                  <p className="text-gray-600">Keep track of past payments</p>
-                </div>
 
-                {/* Transparency */}
-                <div className="text-center">
-                  <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <span className="text-gray-500 text-sm">(big icon)</span>
+                  {/* Payment History */}
+                  <div className="text-center">
+                    <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <span className="text-gray-500 text-sm">(big icon)</span>
+                    </div>
+                    <h3 className="text-xl font-medium mb-2">Payment History</h3>
+                    <p className="text-gray-600">Keep track of past payments</p>
                   </div>
-                  <h3 className="text-xl font-medium mb-2">Transparency</h3>
-                  <p className="text-gray-600">Know who you&apos;re working with before you hire through star ratings, descriptions and more.</p>
+
+                  {/* Transparency */}
+                  <div className="text-center">
+                    <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <span className="text-gray-500 text-sm">(big icon)</span>
+                    </div>
+                    <h3 className="text-xl font-medium mb-2">Transparency</h3>
+                    <p className="text-gray-600">Know who you&apos;re working with before you hire through star ratings, descriptions and more.</p>
+                  </div>
                 </div>
               </div>
-            </div>
             </div>
 
             {/* How it works section */}
@@ -224,47 +219,47 @@ export default function HowItWorks() {
 
             {/* Bottom scroll indicator */}
             {showArrow && (
-            <div className="fixed bottom-0 left-0 right-0 flex flex-col items-center justify-center mb-40 z-10">
-              <p className="text-base text-gray-700 mb-4">
-                {activeTabData?.additionalContent}
-              </p>
-              <div className="flex justify-center animate-bounce">
-                <svg 
-                  className="w-6 h-6 text-gray-700" 
-                  fill="none" 
-                  stroke="currentColor" 
-                  viewBox="0 0 24 24"
-                >
-                  <path 
-                    strokeLinecap="round" 
-                    strokeLinejoin="round" 
-                    strokeWidth={2} 
-                    d="M19 14l-7 7m0 0l-7-7m7 7V3" 
-                  />
-                </svg>
+              <div className="fixed bottom-0 left-0 right-0 flex flex-col items-center justify-center mb-40 z-10">
+                <p className="text-base text-gray-700 mb-4">
+                  {activeTabData?.additionalContent}
+                </p>
+                <div className="flex justify-center animate-bounce">
+                  <svg
+                    className="w-6 h-6 text-gray-700"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 14l-7 7m0 0l-7-7m7 7V3"
+                    />
+                  </svg>
+                </div>
               </div>
-            </div>
-          )}
+            )}
 
 
             <div>
 
-              <Steps/>
+              <Steps />
             </div>
           </>
         )
       }
 
-      {activeTab === 'vendor' && ( 
-        <ForVendor/>
-       )}
+      {activeTab === 'vendor' && (
+        <ForVendor />
+      )}
 
       {activeTab === 'agency' && (
-        <ForAgency/>
+        <ForAgency />
       )}
 
       {activeTab === 'faq' && (
-        <FAQ/>
+        <FAQ />
       )}
 
     </div>
