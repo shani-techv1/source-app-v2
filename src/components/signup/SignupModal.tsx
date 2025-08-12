@@ -17,7 +17,7 @@ type FormData = Record<string, string | string[] | File[] | null>;
 interface SignupModalProps {
   isOpen: boolean;
   onClose: () => void;
-  modalTitle? : string;
+  modalTitle?: string;
 }
 
 const basicDetailsFirstFields: FormField[] = [
@@ -75,7 +75,7 @@ const basicDetailsSecondFields: FormField[] = [
     type: "tel",
     placeholder: "Your contact number"
   },
-    {
+  {
     name: "accountPassword",
     label: "Account Password",
     type: "password",
@@ -93,7 +93,7 @@ const basicDetailsSecondFields: FormField[] = [
     type: "text",
     placeholder: "ZIP or postal code"
   },
-    {
+  {
     name: "gender",
     label: "Gender",
     type: "select",
@@ -118,13 +118,13 @@ const basicDetailsSecondFields: FormField[] = [
 
 const formVariants = {
   hidden: { opacity: 0, y: 20 },
-  visible: { 
-    opacity: 1, 
+  visible: {
+    opacity: 1,
     y: 0,
     transition: { duration: 0.4, ease: "easeOut" as const }
   },
-  exit: { 
-    opacity: 0, 
+  exit: {
+    opacity: 0,
     y: -20,
     transition: { duration: 0.3, ease: "easeIn" as const }
   }
@@ -132,11 +132,11 @@ const formVariants = {
 
 const modalVariants = {
   hidden: { opacity: 0 },
-  visible: { 
+  visible: {
     opacity: 1,
     transition: { duration: 0.3, ease: "easeOut" as const }
   },
-  exit: { 
+  exit: {
     opacity: 0,
     transition: { duration: 0.2, ease: "easeIn" as const }
   }
@@ -160,16 +160,16 @@ export default function SignupModal({ isOpen, onClose, modalTitle = "Join As" }:
     setter((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleDropdownChange = (setter: (value: React.SetStateAction<FormData>) => void) => 
+  const handleDropdownChange = (setter: (value: React.SetStateAction<FormData>) => void) =>
     (name: string, value: string | string[]) => {
-    setter((prev) => ({ ...prev, [name]: value }));
-  };
+      setter((prev) => ({ ...prev, [name]: value }));
+    };
 
-  const handleFileChange = (setter: (value: React.SetStateAction<FormData>) => void) => 
+  const handleFileChange = (setter: (value: React.SetStateAction<FormData>) => void) =>
     (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files ? Array.from(e.target.files) : [];
-    setter((prev) => ({ ...prev, [e.target.name]: files }));
-  };
+      const files = e.target.files ? Array.from(e.target.files) : [];
+      setter((prev) => ({ ...prev, [e.target.name]: files }));
+    };
 
   const handleSubmit = async () => {
     setIsSubmitting(true);
@@ -221,7 +221,7 @@ export default function SignupModal({ isOpen, onClose, modalTitle = "Join As" }:
 
     form.append("email", formPayload.basicDetails.email as string);
 
-    
+
     const basicDetailsResponse = await fetch(`http://13.61.49.212:3000/api/v1/users`, {
       method: "POST",
       headers: {
@@ -242,12 +242,12 @@ export default function SignupModal({ isOpen, onClose, modalTitle = "Join As" }:
     console.log("basicDetailsData", basicDetailsData);
     console.log("formDataResponse", formDataResponse);
 
-    
+
     if (basicDetailsResponse.ok && formDetailsResponse.ok) {
       setStep("success");
       setFormData({});
     } else {
- 
+
       addToast({
         title: "Error",
         description: "An error occurred. Please try again later.",
@@ -261,7 +261,7 @@ export default function SignupModal({ isOpen, onClose, modalTitle = "Join As" }:
     setIsSubmitting(false);
   };
 
-  
+
 
   const getRoleId = (role: CreativeRole) => {
     const rolesMap = {
@@ -317,28 +317,30 @@ export default function SignupModal({ isOpen, onClose, modalTitle = "Join As" }:
           >
             {/* Header */}
             <div className="flex-shrink-0 bg-white rounded-t-2xl z-50 relative">
-              <div className="flex items-center justify-between absolute w-[100%] -top-8 right-1">
-              {step !== "userType" && (
-                    <button 
-                      onClick={goBack}
-                      className="px-2 absolute -top-[10px] -left-[48px]"
-                    >
-                      <ArrowLeft className="h-5 w-5" />
-                    </button>
-                  )}
-                  <button 
-                    onClick={handleClose}
-                    className="p-1  form-close-button"
-                    aria-label="Close modal"
+              <div className="flex items-center justify-between absolute w-[100%] top-[-25px] right-[12px]">
+                {step !== "userType" && (
+                  <button
+                    onClick={goBack}
+                    className="flex items-center text-sm font-medium text-gray-600 hover:text-black transition-colors"
                   >
-                    <X className="h-5 w-5" />
+                    <ArrowLeft className="mr-1 h-4 w-4" />
+                    Back to details
                   </button>
+                )}
+                <button
+                  onClick={handleClose}
+                  className="p-2 rounded-full transition-colors ml-auto form-close-button"
+                  aria-label="Close modal"
+                >
+                  <X className="h-5 w-5" />
+                </button>
               </div>
               {
-                step === "userType" && (<h1 className="text-3xl text-center">{modalTitle || "Join As"}</h1>)
+                step === "userType" && (<h1 className="text-3xl font-bold text-center">{modalTitle || "Join As"}</h1>)
               }
               {
-                ["basicDetails", "roleSelection", "success"].includes(step) && (<h1 className="text-3xl text-center bg-white ">Create an account</h1>)
+                ["basicDetails", "roleSelection", "success"].includes(step) && (<h1 className="text-3xl font-bold text-center bg-white "
+                  style={{ margin: '0 0 20px' }}>Create an account</h1>)
               }
             </div>
             {/* Content */}

@@ -29,7 +29,7 @@ export default function DynamicPage() {
   const router = useRouter();
 
   const handleCloseModal = () => {
-  router.push('/'); // instead of window.history.pushState
+    router.push('/'); // instead of window.history.pushState
   };
 
   useEffect(() => {
@@ -61,8 +61,6 @@ export default function DynamicPage() {
     );
   }
 
-
-
   // Check for custom page components first
   if (slug === 'contact') {
     return (
@@ -79,22 +77,22 @@ export default function DynamicPage() {
   if (slug === 'about') {
     return (
       <>
-      <div className="max-h-screen overflow-hidden relative">
-        <Home />
-      </div>
-      <LiquidGlassModal
-        onClose={handleCloseModal}
-        title=""
-      >
-        <p className="text-gray-700 text-2xl">We’re a community-driven platform for creative professionals to connect, stay
-organized, and bring projects to life.
-Whether you're in fashion, film, or seeking creative services, our tools make it easy
-to manage your work in one place — with chat, invoicing, payments, stats, and
-more.
-Built for collaboration, discovery, and creativity — this is your space to connect,
-create, and grow.</p>
-      </LiquidGlassModal>
-    </>
+        <div className="max-h-screen overflow-hidden relative">
+          <Home />
+        </div>
+        <LiquidGlassModal
+          onClose={handleCloseModal}
+          title=""
+        >
+          <p className="text-gray-700 text-3xl">We’re a community-driven platform for creative professionals to connect, stay
+            organized, and bring projects to life.
+            Whether you're in fashion, film, or seeking creative services, our tools make it easy
+            to manage your work in one place — with chat, invoicing, payments, stats, and
+            more.
+            Built for collaboration, discovery, and creativity — this is your space to connect,
+            create, and grow.</p>
+        </LiquidGlassModal>
+      </>
     )
   }
 
@@ -114,7 +112,7 @@ create, and grow.</p>
     return null;
   }
 
-  else if (notFound)  {
+  else if (notFound) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50">
         <SharedHeader isTransparent={true} />

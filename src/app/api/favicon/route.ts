@@ -43,7 +43,7 @@ export async function GET() {
 
       const icoBuffer = await pngToIco(resizedPngBuffer);
 
-      return new NextResponse(icoBuffer, {
+      return new NextResponse(new Uint8Array(icoBuffer), {
         status: 200,
         headers: {
           'Content-Type': 'image/x-icon',
@@ -54,7 +54,7 @@ export async function GET() {
     }
 
     // If already ICO, serve as-is
-    return new NextResponse(buffer, {
+    return new NextResponse(new Uint8Array(buffer), {
       status: 200,
       headers: {
         'Content-Type': mimeType,

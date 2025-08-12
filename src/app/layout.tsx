@@ -35,11 +35,11 @@ async function getFontSettings() {
     const data = await response.json();
 
     const fontFamily = Array.isArray(data?.fonts) ? data?.fonts[0] : data?.fonts;
-    
+
     const fontUrl = fontFamily
       ? `https://fonts.googleapis.com/css2?family=${fontFamily.replace(/ /g, '+')}&display=swap`
       : '';
-    
+
     return { fontUrl, fontFamily };
   } catch (error) {
     console.error('Error fetching font settings:', error);
@@ -53,27 +53,27 @@ export async function generateMetadata(): Promise<Metadata> {
     const response = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/content`, {
       cache: 'no-store' // Ensure fresh data
     });
-    
+
     if (response.ok) {
       const data: ApiResponse = await response.json();
       const siteTitle = data.general?.find((item: ContentItem) => item.id === 'site-title')?.value || 'Sourced - Creative Network';
       const metaDescription = data.general?.find((item: ContentItem) => item.id === 'meta-description')?.value || 'Sourced simplifies creative connections. Find and hire top photographers, videographers, models, and more.';
       const siteFavicon = data.general?.find((item: ContentItem) => item.id === 'site-favicon')?.value || '/favicon.ico';
-      
+
       // Ensure values are strings
       const titleStr = Array.isArray(siteTitle) ? siteTitle.join(' ') : siteTitle;
       const descStr = Array.isArray(metaDescription) ? metaDescription.join(' ') : metaDescription;
       const faviconStr = Array.isArray(siteFavicon) ? siteFavicon[0] : siteFavicon;
-      
+
       return {
         title: titleStr,
         description: descStr,
         keywords: 'creative network, photographers, videographers, models, talent booking, creative professionals',
         authors: [{ name: 'Sourced' }],
         icons: {
-          icon: '/api/favicon',
-          shortcut: '/api/favicon',
-          apple: '/api/favicon',
+          icon: faviconStr,
+          shortcut: faviconStr,
+          apple: faviconStr,
         },
         openGraph: {
           title: titleStr,
@@ -90,7 +90,7 @@ export async function generateMetadata(): Promise<Metadata> {
   } catch (error) {
     console.error('Error loading dynamic metadata:', error);
   }
-  
+
   // Fallback metadata if API fails
   return {
     title: "Sourced - Creative Network",
