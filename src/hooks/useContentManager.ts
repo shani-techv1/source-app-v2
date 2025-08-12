@@ -156,7 +156,7 @@ const defaultContent: ContentData = {
       placeholder: 'Upload favicon (16x16 or 32x32 pixels, .ico or .png format)'
     },
     {
-      id : 'modal-title',
+      id: 'modal-title',
       title: 'Join as',
       type: 'text',
       value: 'Join as User',
@@ -230,7 +230,7 @@ export const useContentManager = () => {
         const savedContent = await fetch('/api/content');
         if (savedContent.ok) {
           const parsedContent = await savedContent.json();
-          console.log("parsedContent:",parsedContent);
+          // console.log("parsedContent:", parsedContent);
           // Merge with default content to ensure all sections exist
           const mergedContent = {
             ...defaultContent,
@@ -287,14 +287,19 @@ export const useContentManager = () => {
     return Array.isArray(value) ? value[0] || '' : value;
   };
 
+  const getHeroImage = (section: keyof ContentData, id: string): string[] | string => {
+    const value = getContent(section, id);
+    return Array.isArray(value) ? value : value;
+  };
+
   // Helper function to get navigation menu items with URLs
   const getNavMenuItems = (section: keyof ContentData, id: string): { label: string; url: string }[] => {
     const items = getArray(section, id);
     return items.map(item => {
       const [label, url] = item.split('|');
-      return { 
-        label: label || '', 
-        url: url || '#' 
+      return {
+        label: label || '',
+        url: url || '#'
       };
     });
   };
@@ -317,10 +322,11 @@ export const useContentManager = () => {
     getImage,
     getNavMenuItems,
     getNavMenuLabels,
+    getHeroImage,
     // Specific content getters for common use cases
     heroTitle: getText('hero', 'hero-title'),
     heroSubtitle: getText('hero', 'hero-subtitle'),
-    heroImage: getImage('hero', 'hero-image'),
+    heroImage: getHeroImage('hero', 'hero-image'),
     morphingTexts: getArray('hero', 'morphing-texts'),
     launchingText: getText('hero', 'launching-text'),
     brandName: getText('navigation', 'brand-name'),
@@ -335,7 +341,7 @@ export const useContentManager = () => {
     instagramIcon: getImage('footer', 'instagram-icon'),
     linkedinIcon: getImage('footer', 'linkedin-icon'),
     siteTitle: getText('general', 'site-title'),
-    modalTitle: getText('general','modal-title'),
+    modalTitle: getText('general', 'modal-title'),
     metaDescription: getText('general', 'meta-description'),
     siteFavicon: getImage('general', 'site-favicon'),
     // Why Sourced section getters
