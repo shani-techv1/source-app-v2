@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
 .df {
   font-family: "Bebas Neue", serif;
   font-weight: 500;
@@ -20,7 +19,6 @@
   font-weight: 400;
   font-style: italic;
 }
-
 
 body {
   font-family: var(--font-family, system-ui, sans-serif);
@@ -94,7 +92,6 @@ body {
   overflow-x: hidden;
   position: relative;
 }
-
 
 /* Form section scrolling improvements */
 .form-scroll-container {
@@ -254,8 +251,6 @@ body[style*="overflow: hidden"] [role="dialog"] > div {
   pointer-events: auto !important;
 }
 
-
-
 /* Enhanced modal styling and scroll locking */
 body[style*="position: fixed"] {
   overflow-y: hidden !important;
@@ -264,7 +259,7 @@ body[style*="position: fixed"] {
 
 /* Create a modal overlay that blocks ALL interactions */
 body::after {
-  content: '';
+  content: "";
   display: none;
   position: fixed;
   inset: 0;
@@ -358,7 +353,6 @@ body[style*="position: fixed"] [role="dialog"] {
   }
 }
 
-
 @layer base {
   * {
     @apply border-border;
@@ -367,10 +361,6 @@ body[style*="position: fixed"] [role="dialog"] {
     @apply bg-background text-foreground;
   }
 }
-
-
-
-
 
 @layer base {
   * {
@@ -381,9 +371,8 @@ body[style*="position: fixed"] [role="dialog"] {
   }
 }
 
-
 .form-close-button {
   position: absolute;
-  right: -50px;
-  top: -14px;
+  top: -9px;
+  right: -35px;
 }

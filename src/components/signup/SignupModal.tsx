@@ -324,7 +324,7 @@ export default function SignupModal({ isOpen, onClose, modalTitle = "Join As" }:
                     className="flex items-center text-sm font-medium text-gray-600 hover:text-black transition-colors"
                   >
                     <ArrowLeft className="mr-1 h-4 w-4" />
-                    Back to details
+                    {/* Back to details */}
                   </button>
                 )}
                 <button
