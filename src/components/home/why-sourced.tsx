@@ -19,43 +19,7 @@ const WhySourcedSection = ({ onModalOpenChange }: WhySourcedSectionProps) => {
   } = useContentManager();
 
   if (contentLoading) {
-    return (
-      <section className="py-14 md:py-24 px-4 md:px-24">
-        <div className="mx-auto">
-          {/* Skeleton Header */}
-          <div className="mb-20">
-            <div className="inline-block bg-gray-100 px-4 py-2 rounded-full mb-8 animate-pulse">
-              <div className="w-24 h-4 bg-gray-200 rounded-full"></div>
-            </div>
-
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
-              <div className="w-3/4 space-y-4">
-                <div className="h-12 bg-gray-200 rounded-lg animate-pulse"></div>
-                <div className="h-12 bg-gray-200 rounded-lg animate-pulse w-2/3"></div>
-              </div>
-              <div className="flex-shrink-0">
-                <div className="w-32 h-12 bg-gray-200 rounded-lg animate-pulse"></div>
-              </div>
-            </div>
-          </div>
-
-          {/* Skeleton Accordion Items */}
-          <div className="w-full space-y-6 px-12">
-            {[1, 2, 3].map((index) => (
-              <div key={index} className="pl-14 pr-10 py-8 rounded-3xl bg-gray-100">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center">
-                    <div className="h-8 w-8 mr-4 bg-gray-200 rounded animate-pulse"></div>
-                    <div className="h-8 w-48 bg-gray-200 rounded animate-pulse"></div>
-                  </div>
-                  <div className="h-4 w-6 bg-gray-200 rounded animate-pulse"></div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-    );
+    return <div>Loading...</div>;
   }
 
   // Icon mapping
@@ -94,7 +58,7 @@ const WhySourcedSection = ({ onModalOpenChange }: WhySourcedSectionProps) => {
           </div>
 
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
-            <h2 className="text-4xl md:text-6xl md:mb-0 mb-6">
+            <h2 className="text-4xl md:text-6xl font-bold md:mb-0 mb-6">
               {whySourcedTitle.split(' ').map((word, index, array) => (
                 <React.Fragment key={index}>
                   {word}
@@ -118,7 +82,7 @@ const WhySourcedSection = ({ onModalOpenChange }: WhySourcedSectionProps) => {
                 <summary className="flex items-center justify-between cursor-pointer list-none">
                   <div className="flex items-center">
                     {getIcon(accordion.icon)}
-                    <span className="text-xl md:text-2xl">{accordion.title}</span>
+                    <span className="text-xl md:text-2xl font-semibold">{accordion.title}</span>
                   </div>
                   <img 
                     src="/arrow2.svg" 
