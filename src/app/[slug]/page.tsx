@@ -12,6 +12,7 @@ import { Dialog } from '@/components/ui/dialog';
 import Home from '@/components/home/lenis-home';
 import LiquidGlassModal from '@/components/home/about-modal';
 import { useRouter } from 'next/navigation';
+import Index from '@/components/terms';
 
 interface PageData {
   slug: string;
@@ -57,6 +58,18 @@ export default function DynamicPage() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-black"></div>
+      </div>
+    );
+  }
+
+  if (slug === 'terms') {
+    return (
+      <div className="min-h-screen bg-white">
+        <SharedHeader isTransparent={false} />
+        <main className="pt-26">
+          {pageData ? <Index pageData={pageData} /> : <p>Loading terms...</p>}
+        </main>
+        <Footer />
       </div>
     );
   }
