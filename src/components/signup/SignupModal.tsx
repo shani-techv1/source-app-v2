@@ -336,7 +336,7 @@ export default function SignupModal({ isOpen, onClose, modalTitle = "Join As" }:
                 </button>
               </div>
               {
-                step === "userType" && (<h1 className="text-3xl font-bold text-center">{modalTitle || "Join As"}</h1>)
+                step === "userType" && (<h1 className="text-3xl font-bold text-center">{"Join"}</h1>)
               }
               {
                 ["basicDetails", "roleSelection", "success"].includes(step) && (<h1 className="text-3xl font-bold text-center bg-white "
