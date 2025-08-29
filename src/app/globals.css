@@ -376,3 +376,25 @@ body[style*="position: fixed"] [role="dialog"] {
   top: -9px;
   right: -35px;
 }
+
+
+
+/* NProgress styles */
+#nprogress {
+  pointer-events: none;
+}
+
+#nprogress .bar {
+  background-color: #000000;
+  position: fixed;
+  z-index: 9999;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+}
+
+/* Optional spinner */
+#nprogress .peg {
+  display: none;
+}
