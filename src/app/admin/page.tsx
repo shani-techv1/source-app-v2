@@ -319,7 +319,8 @@ export default function AdminDashboard() {
     { id: 'pages', label: 'Pages', icon: FileText },
     { id: 'footerLinks', label: 'Footer Links', icon: ExternalLink },
     { id: 'footer', label: 'Footer', icon: FileText },
-    { id: 'general', label: 'General', icon: Users }
+    { id: 'general', label: 'General', icon: Users },
+    { id: 'admin', label: 'Admin Dashboard', icon: Users },
   ];
 
   const renderContentEditor = (section: ContentSection, sectionKey: keyof ContentData) => {
@@ -902,7 +903,7 @@ export default function AdminDashboard() {
             <nav className="space-y-2">
               {tabs.map((tab) => {
                 const Icon = tab.icon;
-                return (
+                return tab.id != 'admin' ? (
                   <button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
@@ -914,7 +915,21 @@ export default function AdminDashboard() {
                     <Icon className="h-5 w-5 mr-3" />
                     {tab.label}
                   </button>
-                );
+                ) : (
+                  <a
+                    key={tab.id}
+                    href="/dashboard"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`w-full flex items-center px-4 py-3 text-left rounded-lg transition-colors ${activeTab === tab.id
+                      ? 'bg-black text-white'
+                      : 'text-gray-600 hover:bg-gray-100'
+                      }`}
+                  >
+                    <Icon className="h-5 w-5 mr-3" />
+                    {tab.label}
+                  </a>
+                )
               })}
             </nav>
           </div>
