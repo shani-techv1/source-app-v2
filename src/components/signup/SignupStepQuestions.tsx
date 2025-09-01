@@ -36,13 +36,13 @@ const RoleSectionSkeleton = () => (
 );
 
 // Individual role field component for better streaming
-const RoleFieldComponent = React.lazy(() => 
+const RoleFieldComponent = React.lazy(() =>
   Promise.resolve({
-    default: ({ 
-      fields, 
-      handleInputChange, 
-      handleFileChange, 
-      formData 
+    default: ({
+      fields,
+      handleInputChange,
+      handleFileChange,
+      formData
     }: {
       fields: FormField[];
       handleInputChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
@@ -92,22 +92,66 @@ const RoleFieldComponent = React.lazy(() =>
                 </label>
               </div>
             ) : field.field_type === "select" ? (
-              <select
-                id={`form_field_${field.id}`}
-                name={`form_field_${field.id}`}
-                onChange={handleInputChange}
-                className="w-full rounded-lg border border-gray-300 px-4 py-3 focus:border-black focus:ring-1 focus:ring-black"
-              >
-                {field.options?.map(option => (
-                  <option
-                  key={typeof option === 'string' ? option : option.value}
-                  value={typeof option === 'string' ? option : option.value}
-                  disabled={typeof option === 'object' && option.disabled}
+              <>
+                {/* {console.log("field.field_options", field)} */}
+                <select
+                  id={`form_field_${field.id}`}
+                  name={`form_field_${field.id}`}
+                  onChange={handleInputChange}
+                  className="w-full rounded-lg border border-gray-300 px-4 py-3 focus:border-black focus:ring-1 focus:ring-black"
                 >
-                  {typeof option === 'string' ? option : option.label}
-                </option>
-                ))}
-              </select>
+                  {(field.field_options as any[])?.map(option => (
+                    <option
+                      key={typeof option === 'string' ? option : option.value}
+                      value={typeof option === 'string' ? option : option.value}
+                      disabled={typeof option === 'object' && option.disabled}
+                    >
+                      {typeof option === 'string' ? option : option.label}
+                    </option>
+                  ))}
+                </select>
+              </>
+            ) : field.field_type === "radio" ? (
+              <>
+                <div className="flex flex-col space-y-2">
+                  {(field.field_options as any[])?.map(option => (
+                    <label key={typeof option === 'string' ? option : option.value} className="flex items-center space-x-2">
+                      <input
+                        type="radio"
+                        id={`form_field_${field.id}_${typeof option === 'string' ? option : option.value}`}
+                        name={`form_field_${field.id}`}
+                        value={typeof option === 'string' ? option : option.value}
+                        checked={formData[`form_field_${field.id}`] === (typeof option === 'string' ? option : option.value)}
+                        onChange={handleInputChange}
+                        className="h-4 w-4 text-black focus:ring-black border-gray-300"
+                      />
+                      <span className="text-sm text-gray-700">
+                        {typeof option === 'string' ? option : option.label}
+                      </span>
+                    </label>
+                  ))}
+                </div>
+              </>
+            ) : field.field_type === "checkbox" ? (
+              <>
+                <div className="flex flex-col space-y-2">
+                  {(field.field_options as any[])?.map((option, index) => (
+                    <label key={typeof option === 'string' ? option : option.value} className="flex items-center space-x-2">
+                      <input
+                        type="checkbox"
+                        id={`form_field_${field.id}_${typeof option === 'string' ? option : option.value}`}
+                        name={`form_field_${field.id}_${typeof option === 'string' ? option : option.value}`}
+                        value={typeof option === 'string' ? option : option.value}
+                        onChange={handleInputChange}
+                        className="h-4 w-4 rounded text-black focus:ring-black border-gray-300"
+                      />
+                      <span className="text-sm text-gray-700">
+                        {typeof option === 'string' ? option : option.label}
+                      </span>
+                    </label>
+                  ))}
+                </div>
+              </>
             ) : field.field_type === "group" ? (
               <>
                 {field?.fields?.map(subField => (
@@ -136,11 +180,11 @@ const RoleFieldComponent = React.lazy(() =>
                             <p className="text-xs text-gray-500">{subField.field_placeholder}</p>
                           </div>
                           {formData[`form_field_${subField.id}`] && Array.isArray(formData[`form_field_${subField.id}`]) && (
-                              <p className="text-xs text-gray-500">{formData?.[`form_field_${subField.id}`]?.length} files uploaded</p>
-                            )}
-                            {formData[`form_field_${subField.id}`] && !Array.isArray(formData[`form_field_${subField.id}`]) && (
-                              <p className="text-xs text-gray-500">{formData?.[`form_field_${field.id}`] as string}</p>
-                            )}
+                            <p className="text-xs text-gray-500">{formData?.[`form_field_${subField.id}`]?.length} files uploaded</p>
+                          )}
+                          {formData[`form_field_${subField.id}`] && !Array.isArray(formData[`form_field_${subField.id}`]) && (
+                            <p className="text-xs text-gray-500">{formData?.[`form_field_${field.id}`] as string}</p>
+                          )}
                           <input
                             id={`form_field_${subField.id}`}
                             name={`form_field_${subField.id}`}
@@ -159,13 +203,13 @@ const RoleFieldComponent = React.lazy(() =>
                         className="w-full rounded-lg border border-gray-300 px-4 py-3 focus:border-black focus:ring-1 focus:ring-black"
                       >
                         {subField.options?.map(option => (
-                           <option
-                           key={typeof option === 'string' ? option : option.value}
-                           value={typeof option === 'string' ? option : option.value}
-                           disabled={typeof option === 'object' && option.disabled}
-                         >
-                           {typeof option === 'string' ? option : option.label}
-                         </option>
+                          <option
+                            key={typeof option === 'string' ? option : option.value}
+                            value={typeof option === 'string' ? option : option.value}
+                            disabled={typeof option === 'object' && option.disabled}
+                          >
+                            {typeof option === 'string' ? option : option.label}
+                          </option>
                         ))}
                       </select>
                     ) : (
@@ -257,20 +301,20 @@ export function SignupStepQuestions({
     <>
 
       {/* Content */}
-      <div 
+      <div
         ref={scrollContainerRef}
         className="space-y-6"
       >
         {selectedRoles.map((role, roleIndex) => (
-          <div 
-            key={role + "" + roleIndex} 
+          <div
+            key={role + "" + roleIndex}
             className="pb-8"
             data-role-section
           >
             <div className="mb-6">
               <h3 className="text-xs font-semibold mb-2 uppercase tracking-wide text-gray-700">{role}</h3>
             </div>
-            
+
             <Suspense fallback={<RoleSectionSkeleton />}>
               {loadedRoles.has(role) && allFieldsByRole[role] ? (
                 <RoleFieldComponent
@@ -285,7 +329,7 @@ export function SignupStepQuestions({
             </Suspense>
           </div>
         ))}
-        
+
         <div className="pt-3">
           <div className="flex items-center">
             <input

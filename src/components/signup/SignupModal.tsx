@@ -339,7 +339,7 @@ export default function SignupModal({ isOpen, onClose, modalTitle = "Join As" }:
                 step === "userType" && (<h1 className="text-3xl font-bold text-center">{"Join"}</h1>)
               }
               {
-                ["basicDetails", "roleSelection", "success"].includes(step) && (<h1 className="text-3xl font-bold text-center bg-white "
+                ["basicDetails", "roleSelection", "success"].includes(step) && (<h1 className="text-3xl font-bold text-center bg-white"
                   style={{ margin: '0 0 20px' }}>Create an account</h1>)
               }
             </div>

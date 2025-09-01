@@ -23,7 +23,7 @@ export default function Sidebar() {
         >
             {/* Header */}
             <div className="flex items-center justify-between p-4 border-b">
-                {isOpen && <span className="font-bold text-lg">Logo</span>}
+                {isOpen && <span className="font-bold text-lg">Sourced Admin</span>}
                 <button
                     onClick={() => setIsOpen(!isOpen)}
                     className="p-1 rounded hover:bg-gray-200"
@@ -38,7 +38,7 @@ export default function Sidebar() {
                     <Link
                         key={item.path}
                         href={item.path}
-                        className={`flex items-center px-4 py-2 rounded hover:bg-gray-200 transition ${pathname === item.path ? "bg-gray-200 font-semibold" : ""
+                        className={`flex items-center px-4 py-2 rounded hover:bg-gray-200 transition ${pathname === item.path ? "bg-gray-200 font-lighter" : ""
                             }`}
                     >
                         {isOpen ? item.name : item.name.charAt(0)}

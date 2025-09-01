@@ -106,7 +106,7 @@ export default function RolesPage() {
                                 <td className="border px-4 py-2">
                                     <Link
                                         href={`/dashboard/roles/${role.id}`}
-                                        className="text-blue-600 hover:underline"
+                                        className="text-black hover:underline"
                                     >
                                         {role.name}
                                     </Link>
