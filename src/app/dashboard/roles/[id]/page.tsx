@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import { useParams ,useRouter  } from "next/navigation";
 import axiosInstance from "@/hooks/axiosInstance";
 import {
     DragDropContext,
@@ -9,6 +9,7 @@ import {
     Draggable,
     DropResult,
 } from "@hello-pangea/dnd";
+import { SquareArrowLeft } from "lucide-react";
 
 interface Field {
     id?: number;
@@ -65,6 +66,8 @@ export default function RoleDetailPage() {
     const params = useParams();
     const [loading, setLoading] = useState(true);
     const [fields, setFields] = useState<Field[]>([]);
+    const router = useRouter();
+
 
     // Edit modal state
     const [editingField, setEditingField] = useState<Field | null>(null);
@@ -190,7 +193,7 @@ export default function RoleDetailPage() {
         );
 
     return (
-        <div className="flex h-[calc(100vh-94px)]">
+        <div className="flex h-[calc(100vh-120px)]">
             {/* LEFT SIDEBAR */}
             <div className="w-1/4 bg-gray-100 border-r p-4">
                 <h2 className="font-bold text-lg mb-4">Add Fields</h2>
@@ -209,6 +212,7 @@ export default function RoleDetailPage() {
 
             {/* RIGHT SIDE FORM PREVIEW */}
             <div className="flex-1 p-6 overflow-y-auto h-[calc(100vh-94px)]">
+                <SquareArrowLeft className="mb-3 cursor-pointer" onClick={() => router.back()} />
                 <h2 className="font-bold text-lg mb-4">Form Preview</h2>
                 {fields.length === 0 && (
                     <p className="text-gray-500">No fields found. Add new from left.</p>
