@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import { Menu } from "lucide-react";
 
 const menuItems = [
-    { name: "Dashboard", path: "/dashboard" },
+    // { name: "Dashboard", path: "/dashboard" },
     { name: "Roles", path: "/dashboard/roles" },
     { name: "Users", path: "/dashboard/users" },
     { name: "Settings", path: "/dashboard/settings" },
