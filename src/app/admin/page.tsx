@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Save, Upload, Eye, EyeOff, Settings, Home, Users, FileText, Lock, Unlock, Plus, Trash2, Code, ExternalLink, X } from 'lucide-react';
+import { Save, Upload, Eye, EyeOff, Settings, Home, Users, FileText, Lock, Unlock, Plus, Trash2, Code, ExternalLink, X, SquareMenu } from 'lucide-react';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import Link from 'next/link';
@@ -38,7 +38,7 @@ export default function AdminDashboard() {
     general: [],
     whySourced: [],
     pages: [],
-    footerLinks: []
+    footerLinks: [],
   });
   const [hasChanges, setHasChanges] = useState(false);
   const [previewMode, setPreviewMode] = useState(false);
@@ -320,7 +320,7 @@ export default function AdminDashboard() {
     { id: 'footerLinks', label: 'Footer Links', icon: ExternalLink },
     { id: 'footer', label: 'Footer', icon: FileText },
     { id: 'general', label: 'General', icon: Users },
-    { id: 'admin', label: 'Admin Dashboard', icon: Users },
+    { id: 'admin', label: 'Dashboard', icon: SquareMenu },
   ];
 
   const renderContentEditor = (section: ContentSection, sectionKey: keyof ContentData) => {
@@ -916,11 +916,9 @@ export default function AdminDashboard() {
                     {tab.label}
                   </button>
                 ) : (
-                  <a
+                  <button
                     key={tab.id}
-                    href="/dashboard"
-                    target="_blank"
-                    rel="noopener noreferrer"
+                    onClick={() => setActiveTab(tab.id)}
                     className={`w-full flex items-center px-4 py-3 text-left rounded-lg transition-colors ${activeTab === tab.id
                       ? 'bg-black text-white'
                       : 'text-gray-600 hover:bg-gray-100'
@@ -928,7 +926,20 @@ export default function AdminDashboard() {
                   >
                     <Icon className="h-5 w-5 mr-3" />
                     {tab.label}
-                  </a>
+                  </button>
+                  // <a
+                  //   key={tab.id}
+                  //   href="/dashboard"
+                  //   target="_blank"
+                  //   rel="noopener noreferrer"
+                  //   className={`w-full flex items-center px-4 py-3 text-left rounded-lg transition-colors ${activeTab === tab.id
+                  //     ? 'bg-black text-white'
+                  //     : 'text-gray-600 hover:bg-gray-100'
+                  //     }`}
+                  // >
+                  //   <Icon className="h-5 w-5 mr-3" />
+                  //   {tab.label}
+                  // </a>
                 )
               })}
             </nav>
@@ -948,16 +959,26 @@ export default function AdminDashboard() {
               </h2>
 
               <div className="space-y-6">
-                {contentData[activeTab as keyof ContentData].map((section) => {
-                  return (
-                    <div key={section.id} className="border-b border-gray-200 pb-6 last:border-b-0">
-                      <label className="block text-sm font-medium text-gray-700 mb-3">
-                        {section.title}
-                      </label>
-                      {renderContentEditor(section, activeTab as keyof ContentData)}
-                    </div>
-                  )
-                })}
+                {activeTab === 'admin' ? (
+                  <iframe
+                    src="/dashboard/roles"
+                    className="w-full h-[80vh] border rounded-lg shadow"
+                    title="Admin Iframe"
+                  />
+                ) : (
+                  <>
+                    {contentData[activeTab as keyof ContentData].map((section) => {
+                      return (
+                        <div key={section.id} className="border-b border-gray-200 pb-6 last:border-b-0">
+                          <label className="block text-sm font-medium text-gray-700 mb-3">
+                            {section.title}
+                          </label>
+                          {renderContentEditor(section, activeTab as keyof ContentData)}
+                        </div>
+                      )
+                    })}
+                  </>
+                )}
               </div>
             </motion.div>
           </div>
