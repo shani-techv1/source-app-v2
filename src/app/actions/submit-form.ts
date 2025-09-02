@@ -156,6 +156,7 @@ export async function submitForm(formData: SubmitFormData) {
 
   } catch (error) {
     console.error("Error submitting form:", error);
+    
     return {
       success: false,
       error: "An error occurred. Please check your network and try again."
